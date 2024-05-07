@@ -9,24 +9,26 @@ import { Role } from '../Role/role.enum';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.Management)
   @Post('user/create')
-  async signUpUser(
-    @Body() userData: CreateUserDto,
-    @Request() req: Request,
-  ): Promise<BasicResponse> {
-    console.log(req.headers['authorization']);
+  async signUpUser(@Body() userData: CreateUserDto): Promise<BasicResponse> {
     return this.userService.createUser(userData);
   }
 
   @Get('user/signIn')
   async signInUser(@Body() userData: SignInUserDto): Promise<BasicResponse> {
-    return this.userService.getUser(userData);
+    return this.userService.signIn(userData);
   }
 
   @Roles()
   @Get('user/signOut')
   async signOutUser(@Request() req: Request): Promise<BasicResponse> {
     return this.userService.signOut(req.headers['authorization']);
+  }
+
+  @Roles()
+  @Get('user/details')
+  async userDetails(@Request() req: Request): Promise<BasicResponse> {
+    return this.userService.getDetails(req.headers['authorization']);
   }
 }

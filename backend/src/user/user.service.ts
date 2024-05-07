@@ -16,36 +16,30 @@ export class UserService {
     try {
       const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
       data.password = await bcrypt.hash(data.password, salt);
-
       console.log(data);
-
       const dbRes = await this.prisma.user.create({
         data,
       });
-
       console.log('data', dbRes);
-
       return { status: HttpStatus.CREATED, data: dbRes, error: false };
     } catch (err) {
       return errorHandler(err);
     }
   }
 
-  async getUser(data: SignInUserDto): Promise<BasicResponse> {
+  async signIn(data: SignInUserDto): Promise<BasicResponse> {
     const dbRes = await this.prisma.user.findUnique({
       where: {
         email: data.email,
       },
     });
-
     if (dbRes === null)
       return {
         status: HttpStatus.BAD_REQUEST,
         data: '',
-        message: ['User not found'],
+        message: ['user not found'],
         error: true,
       };
-
     if (!(await bcrypt.compare(data.password, dbRes.password)))
       return {
         status: HttpStatus.BAD_REQUEST,
@@ -53,18 +47,14 @@ export class UserService {
         message: ['password invalid'],
         error: true,
       };
-
     delete dbRes.password;
-
     const token = uuid4();
-
     try {
       const tokenExist = await this.prisma.token.findFirst({
         where: {
           userId: dbRes.id,
         },
       });
-
       const exp_at = Date.now() + 1 * 60 * 60 * 1000;
       const tokenObj = {
         token: token,
@@ -73,7 +63,6 @@ export class UserService {
         exp_At: new Date(exp_at),
         is_logged_out: false,
       };
-
       if (!tokenExist) {
         await this.prisma.token.create({
           data: tokenObj,
@@ -89,12 +78,10 @@ export class UserService {
     } catch (err) {
       return errorHandler(err);
     }
-
     const result: UserSignIn = {
       ...dbRes,
       token: token,
     };
-
     return { status: HttpStatus.OK, data: result, error: false };
   }
 
@@ -107,10 +94,34 @@ export class UserService {
         token: token,
       },
     });
-
     return {
       status: HttpStatus.OK,
       data: 'logged out successfully',
+      error: false,
+    };
+  }
+
+  async getDetails(token: string): Promise<BasicResponse> {
+    const result = await this.prisma.token
+      .findFirst({
+        where: {
+          token: token,
+        },
+      })
+      .user();
+
+    if (result) {
+      delete result.password;
+      return {
+        status: HttpStatus.OK,
+        data: result,
+        error: false,
+      };
+    }
+
+    return {
+      status: HttpStatus.NOT_FOUND,
+      data: 'user not found',
       error: false,
     };
   }

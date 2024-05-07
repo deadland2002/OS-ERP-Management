@@ -43,7 +43,7 @@ model Student_Details {
   father_name       String
   mother_name       String
   address           String
-  alternate_number  BigInt
+  alternate_number  String
   guardian_name     String
   guardian_relation String
   studentRelation   User   @relation(fields: [student_id], references: [id])
@@ -53,8 +53,7 @@ model Student_Details {
 model Employee_Details {
   employee_id          Int     @unique
   address              String
-  mob_number           BigInt
-  alternate_mob_number BigInt
+  alternate_mob_number String
   guardian_name        String
   guardian_relation    String
   uid                  String

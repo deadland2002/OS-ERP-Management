@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import {BasicResponse} from "../../interface/response/basic";
 import {ClassService} from "./class.service";
-import {CreateUserDto, SignInUserDto} from "../User/user.dto";
+import {CreateUserDto, SignInUserDto} from "../user/user.dto";
 
 @Controller()
 export class ClassController {
