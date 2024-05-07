@@ -22,7 +22,6 @@ model User {
   role             Role              @default(TEACHER)
   token            Token?
   student_Details  Student_Details?
-  Class            Class[]
   Employee_Details Employee_Details?
 }
 
@@ -52,7 +51,7 @@ model Student_Details {
 }
 
 model Employee_Details {
-  employee_id          Int    @unique
+  employee_id          Int     @unique
   address              String
   mob_number           BigInt
   alternate_mob_number BigInt
@@ -60,7 +59,8 @@ model Employee_Details {
   guardian_relation    String
   uid                  String
   uid_type             String
-  employeeRelation     User   @relation(fields: [employee_id], references: [id])
+  employeeRelation     User    @relation(fields: [employee_id], references: [id])
+  classRelation        Class[]
 }
 
 model Class {
@@ -69,7 +69,7 @@ model Class {
   capacity            Int
   coordinator         Int
   fees_per_month      Decimal
-  coordinatorRelation User              @relation(fields: [coordinator], references: [id])
+  coordinatorRelation Employee_Details  @relation(fields: [coordinator], references: [employee_id])
   Student_Details     Student_Details[]
 }
 

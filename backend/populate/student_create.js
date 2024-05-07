@@ -1,22 +1,21 @@
-const myHeaders = new Headers();
-myHeaders.append('authorization', '413437b5-36e3-4fe9-9c11-30cd51cf09f9');
-myHeaders.append('Content-Type', 'application/json');
+const axios = require('axios');
 
 const fetchFunction = (studentId) => {
-  const raw = JSON.stringify({
-    email: `satvik${studentId}@gmail.com`,
+  const raw = {
+    email: `student${studentId}@gmail.com`,
     password: '1234',
-    name: `satvik ${studentId}`,
-    mobileNo: '+919260981510',
+    name: `student ${studentId}`,
+    mobileNo: `+9192609815${studentId}`,
     role: 'STUDENT',
-  });
+  };
 
-  return fetch('localhost:3000/v1/user/create', {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-  })
-    .then((response) => response.text())
+  return axios
+    .post('http://localhost:3000/v1/user/create', raw, {
+      headers: {
+        authorization: `15375821-f4d8-497f-af5c-35164c9cf579`,
+      },
+    })
+    .then((response) => response.data)
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
 };
