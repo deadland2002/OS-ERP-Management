@@ -21,7 +21,11 @@ export class UserService {
         data,
       });
       console.log('data', dbRes);
-      return { status: HttpStatus.CREATED, data: dbRes, error: false };
+      return {
+        status: HttpStatus.CREATED,
+        data: 'user created successfully',
+        error: false,
+      };
     } catch (err) {
       return errorHandler(err);
     }
@@ -52,13 +56,13 @@ export class UserService {
     try {
       const tokenExist = await this.prisma.token.findFirst({
         where: {
-          userId: dbRes.id,
+          user_id: dbRes.user_id,
         },
       });
       const exp_at = Date.now() + 1 * 60 * 60 * 1000;
       const tokenObj = {
         token: token,
-        userId: dbRes.id,
+        user_id: dbRes.user_id,
         role: dbRes.role,
         exp_At: new Date(exp_at),
         is_logged_out: false,
@@ -71,7 +75,7 @@ export class UserService {
         await this.prisma.token.update({
           data: tokenObj,
           where: {
-            userId: dbRes.id,
+            user_id: dbRes.user_id,
           },
         });
       }

@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 class EmployeeDetailsDto {
   @IsOptional()
@@ -30,4 +36,28 @@ export class UpdateEmployeeDetailsDto extends EmployeeDetailsDto {
   @IsNotEmpty()
   @IsNumber()
   employee_id: number;
+}
+
+export class AssignEmployeeClassDto {
+  @IsNotEmpty()
+  @IsNumber()
+  teacher_id: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  class_id: number;
+
+  @IsOptional()
+  @IsBoolean()
+  override: boolean;
+}
+
+export class AssignEmployeeSubjectDto {
+  @IsNotEmpty()
+  @IsNumber()
+  teacher_id: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  subject_id: number;
 }

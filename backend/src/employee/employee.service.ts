@@ -1,6 +1,10 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { UpdateEmployeeDetailsDto } from './employee.dto';
+import {
+  AssignEmployeeClassDto,
+  AssignEmployeeSubjectDto,
+  UpdateEmployeeDetailsDto,
+} from './employee.dto';
 import { BasicResponse } from '../../interface/response/basic';
 import errorHandler from '../../helper/errorHandler';
 
@@ -8,7 +12,7 @@ import errorHandler from '../../helper/errorHandler';
 export class EmployeeService {
   constructor(private prisma: PrismaService) {}
 
-  async updateEmployee(data: UpdateEmployeeDetailsDto): Promise<BasicResponse> {
+  async updateDetails(data: UpdateEmployeeDetailsDto): Promise<BasicResponse> {
     try {
       const dataClone: UpdateEmployeeDetailsDto = { ...data };
       delete dataClone.employee_id;
@@ -48,6 +52,20 @@ export class EmployeeService {
           error: false,
         };
       }
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async assignClass(data: AssignEmployeeClassDto): Promise<BasicResponse> {
+    try {
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async assignSubject(data: AssignEmployeeSubjectDto): Promise<BasicResponse> {
+    try {
     } catch (err) {
       return errorHandler(err);
     }

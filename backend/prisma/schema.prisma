@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id               Int               @id @default(autoincrement())
+  user_id          Int               @id @default(autoincrement())
   name             String
   email            String            @unique
   password         String
@@ -28,8 +28,8 @@ model User {
 
 model Token {
   token         String   @unique
-  user          User     @relation(fields: [userId], references: [id])
-  userId        Int      @unique
+  user          User     @relation(fields: [user_id], references: [user_id])
+  user_id       Int      @unique
   created_at    DateTime @default(now())
   exp_At        DateTime
   ip            String?
@@ -47,8 +47,8 @@ model Student_Details {
   alternate_number  String
   guardian_name     String
   guardian_relation String
-  studentRelation   User   @relation(fields: [student_id], references: [id])
-  classRelation     Class  @relation(fields: [class_id], references: [id])
+  studentRelation   User   @relation(fields: [student_id], references: [user_id])
+  classRelation     Class  @relation(fields: [class_id], references: [class_id])
 }
 
 model Employee_Details {
@@ -59,31 +59,31 @@ model Employee_Details {
   guardian_relation    String
   uid                  String
   uid_type             String
-  employeeRelation     User    @relation(fields: [employee_id], references: [id])
+  employeeRelation     User    @relation(fields: [employee_id], references: [user_id])
   classRelation        Class[]
 }
 
 model Class {
-  id                  Int               @id @default(autoincrement())
-  name                String
+  class_id            Int               @id @default(autoincrement())
+  class_name          String            @unique
   capacity            Int
-  coordinator         Int
+  coordinator         Int?
   fees_per_month      Decimal
-  coordinatorRelation Employee_Details  @relation(fields: [coordinator], references: [employee_id])
+  coordinatorRelation Employee_Details? @relation(fields: [coordinator], references: [employee_id])
   Student_Details     Student_Details[]
 }
 
 model Subject {
-  subject_id Int       @id @default(autoincrement())
-  name       String
-  code       String
-  Teaches    Teaches[]
+  subject_id   Int       @id @default(autoincrement())
+  subject_name String
+  subject_code String
+  Teaches      Teaches[]
 }
 
 model Teaches {
   teacher_id      Int
   subject_id      Int
-  teacherRelation User    @relation(fields: [teacher_id], references: [id])
+  teacherRelation User    @relation(fields: [teacher_id], references: [user_id])
   subjectRelation Subject @relation(fields: [subject_id], references: [subject_id])
 
   @@id([teacher_id, subject_id])

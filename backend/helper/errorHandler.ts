@@ -2,8 +2,6 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { HttpStatus } from '@nestjs/common';
 
 function handleError(err: Error) {
-  console.log(err);
-
   if (err instanceof PrismaClientKnownRequestError) {
     if (err.code === 'P2002') {
       const arrOfTarget = err.meta.target as string[];
