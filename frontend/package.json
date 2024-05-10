@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@flaticon/flaticon-uicons": "^3.2.1",
+    "@nextui-org/react": "^2.3.6",
     "@satvikshukla/beautify-console": "^1.1.21",
     "axios": "^1.6.8",
+    "framer-motion": "^11.1.9",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",

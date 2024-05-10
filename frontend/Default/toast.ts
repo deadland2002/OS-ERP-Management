@@ -47,7 +47,7 @@ const toastCompactTheme :ToastOptions = {
     theme: "light",
     transition: Bounce,
     style:{
-        minHeight:0
+        minHeight:0,
     },
     bodyStyle:{
         margin: 2,

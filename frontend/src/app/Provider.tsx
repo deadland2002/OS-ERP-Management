@@ -1,10 +1,13 @@
 import React, {PropsWithChildren} from 'react';
 import {ToastContainer} from "react-toastify";
+import {NextUIProvider} from "@nextui-org/react";
 
 const Provider = ({ children }: PropsWithChildren) => {
   return <>
-      {children}
       <ToastContainer />
+      <NextUIProvider>
+          {children}
+      </NextUIProvider>
   </>;
 };
 
