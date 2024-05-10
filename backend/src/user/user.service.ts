@@ -7,6 +7,7 @@ import * as process from 'node:process';
 import { UserSignIn } from '../../interface/User/SignIn';
 import { v4 as uuid4 } from 'uuid';
 import errorHandler from '../../helper/errorHandler';
+import stringToPassword from "../../helper/stringToPassword";
 
 @Injectable()
 export class UserService {
@@ -14,8 +15,7 @@ export class UserService {
 
   async createUser(data: CreateUserDto): Promise<BasicResponse> {
     try {
-      const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
-      data.password = await bcrypt.hash(data.password, salt);
+      data.password = await stringToPassword(data.password);
       console.log(data);
       const dbRes = await this.prisma.user.create({
         data,

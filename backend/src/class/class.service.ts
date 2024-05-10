@@ -25,4 +25,26 @@ export class ClassService {
       return errorHandler(err);
     }
   }
+
+  async get_all(): Promise<BasicResponse> {
+    try {
+      const classes = await this.prisma.class.findMany();
+
+      if (classes)
+        return {
+          status: HttpStatus.OK,
+          data: classes,
+          error: false,
+        };
+      else
+        return {
+          status: HttpStatus.NOT_FOUND,
+          data: '',
+          message: ['Classes not found'],
+          error: false,
+        };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
 }
