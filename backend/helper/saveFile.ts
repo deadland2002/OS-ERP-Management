@@ -6,7 +6,7 @@ const saveFile = async (file: Express.Multer.File[]) => {
   const uniqueFileName = uuid4();
 
   const filePath = `/files/students/${uniqueFileName}.jpg`;
-  const finalPath = `.${filePath}`;
+  const finalPath = `./public${filePath}`;
   try {
     await new Promise((resolve) => {
       fs.writeFile(finalPath, imageFile.buffer, () => {

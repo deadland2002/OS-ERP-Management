@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 const deleteFile = async (path: string) => {
   try {
     await new Promise((resolve) => {
-      fs.rm(`.${path}`, () => {
+      fs.rm(`./public${path}`, () => {
         resolve(1);
       });
     });
