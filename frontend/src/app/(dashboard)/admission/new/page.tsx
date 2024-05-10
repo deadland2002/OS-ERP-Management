@@ -2,12 +2,10 @@
 
 import React from "react";
 import ImageUpload from "../../../../../components/common/ImageUpload";
-import FileUpload from "../../../../../components/common/FileUpload";
 import {Button} from "@nextui-org/react";
 
 const Page = () => {
   const [studentImage, setStudentImage] = React.useState<File | null>(null);
-  const [classList,setClassList] = React.useState();
 
   const HandleChangeImage = (file: File) => {
     setStudentImage(file);
