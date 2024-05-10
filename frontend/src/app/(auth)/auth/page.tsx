@@ -1,6 +1,16 @@
+"use client"
+
 import React from "react";
+import {toast} from "react-toastify";
+import {toastCompactTheme} from "../../../../Default/toast";
 
 const Page = () => {
+
+  const HandleSignIn = () =>{
+    console.log("ok")
+    toast.success("signed in",toastCompactTheme);
+  }
+
   return (
     <div className={`w-full flex h-screen`}>
       <div className={`w-1/2 flex justify-center items-center bg-gray-50`}>
@@ -22,7 +32,7 @@ const Page = () => {
             <input className={`bg-gray-100 outline-0 py-1 rounded-md px-2`} placeholder={`******`} />
           </div>
 
-            <button className={`px-2 py-1 bg-blue-500 rounded-md font-semibold text-white`}>Sign In</button>
+            <button onClick={HandleSignIn} className={`px-2 py-1 bg-blue-500 rounded-md font-semibold text-white`}>Sign In</button>
         </div>
       </div>
 
