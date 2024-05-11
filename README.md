@@ -39,13 +39,30 @@ Follow my GitHub for content
 All Rights Reserved</h6>
 
 ## Contributors
-<div style="display: flex;flex-wrap: wrap;gap: 15px">
-    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
-        <img src="/contributors/satvik_shukla.jpg" alt="satvik_shukla" style="border-radius: 1000px;aspect-ratio: 1;object-fit: cover;width: 50px"/>
-        <span>Satvik Shukla</span>
-    </div>
-    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
-        <img src="/contributors/ayush_agihotri.jpg" alt="ayush_agnihotri" style="border-radius: 1000px;aspect-ratio: 1;object-fit: cover;width: 50px"/>
-        <span>Ayush Agnihotri</span>
-    </div>
+
+<div align="center">
+  <span>To start contributing , fork this repository and add your name to the README.md under contribution.</span>
+  <br/>
+  <span>Happy contributing 👍</span>
 </div>
+<br/>
+<table>
+  <tr>
+    <td align="center">
+        <a href="/contributors/satvik_shukla.jpg">
+            <img src="contributors/satvik_shukla.jpg" width="100px;" alt=""/>
+            <br />
+            <sub><b>Satvik SHukla</b></sub>
+        </a>
+        <br />
+    </td>
+    <td align="center">
+        <a href="/contributors/ayush_agihotri.jpg">
+            <img src="contributors/ayush_agihotri.jpg" width="100px;" alt=""/>
+            <br />
+            <sub><b>Ayush Agnihotri</b></sub>
+        </a>
+        <br />
+    </td>
+  </tr>
+</table>
