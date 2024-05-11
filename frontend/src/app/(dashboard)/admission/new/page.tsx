@@ -8,7 +8,7 @@ const Page = async () => {
     if(!data)
       return redirect("/auth")
 
-    if(!["MANAGEMENT","ADMIN"].includes(data.role))
+    if(!["ADMISSION","ADMIN"].includes(data.role))
       return redirect("/not-found")
 
     return <New_Admission_Page />;

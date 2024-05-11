@@ -16,7 +16,7 @@ import { Role } from '../Role/role.enum';
 export class ManagementController {
   constructor(private readonly classService: ManagementService) {}
 
-  @Roles(Role.Admin, Role.Admission)
+  @Roles(Role.Admin, Role.Management)
   @Post('employee/new')
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'employee_image', maxCount: 1 }]),

@@ -1,5 +1,11 @@
-import {IsEnum, IsNotEmpty, IsOptional, IsString} from 'class-validator';
-import {Role} from "@prisma/client";
+import {
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Role } from '@prisma/client';
 
 export class Employee_Add {
   @IsOptional()
@@ -39,7 +45,7 @@ export class Employee_Add {
   alternate_number: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsDateString()
   date_of_birth: string;
 
   @IsNotEmpty()
@@ -67,6 +73,7 @@ export class Employee_Add {
     TEACHER: Role.TEACHER,
     ACCOUNTS: Role.ACCOUNTS,
     MANAGEMENT: Role.MANAGEMENT,
+    ADMISSION: Role.ADMISSION,
   })
   role: Role;
 

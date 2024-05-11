@@ -57,7 +57,6 @@ const New_Admission_Page = () => {
     const data = new FormData(form);
     const had_dob = data.get("date_of_birth") as string;
     const dob = new Date(had_dob);
-    console.log(dob, had_dob);
     data.set("date_of_birth", dob.toISOString());
 
     if (!classList || classList.length == 0)
@@ -76,7 +75,7 @@ const New_Admission_Page = () => {
       if (response.error || response.message) {
         reject(response.message);
       } else {
-        form.reset();
+        // form.reset();
         resolve(1);
       }
     });
@@ -97,9 +96,11 @@ const New_Admission_Page = () => {
 
   return (
     <div className={`flex w-full flex-col`}>
-      <span className={`font-semibold`}>Add New Student</span>
+      <div className={`pl-4 pt-4`}>
+        <span className={`font-semibold`}>Add New Student</span>
+      </div>
       <div
-        className={`border-gray-300 p-2 rounded-md w-full flex justify-center`}
+        className={`border-gray-300 p-2 rounded-md w-full flex justify-center pb-10`}
       >
         <form
           className={`w-full text-sm flex max-w-[700px] gap-4 flex-col`}
@@ -111,7 +112,6 @@ const New_Admission_Page = () => {
             <div
               className={`min-w-[200px] w-[200px] h-[250px] border-2 border-purple-300 rounded-md border-dashed`}
             >
-
               <ImageUpload
                 onAdd={HandleChangeImage}
                 file={studentImage}
@@ -357,7 +357,6 @@ const New_Admission_Page = () => {
             </div>
           </div>
           <div className={`flex justify-center`}>
-            {/* eslint-disable-next-line react/jsx-no-undef */}
             <Button
               type={"submit"}
               variant={"solid"}
