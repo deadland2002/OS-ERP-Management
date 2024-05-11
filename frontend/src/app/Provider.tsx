@@ -4,7 +4,7 @@ import {NextUIProvider} from "@nextui-org/react";
 
 const Provider = ({ children }: PropsWithChildren) => {
   return <>
-      <ToastContainer />
+      <ToastContainer stacked />
       <NextUIProvider>
           {children}
       </NextUIProvider>

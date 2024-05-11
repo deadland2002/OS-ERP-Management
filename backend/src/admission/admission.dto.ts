@@ -39,9 +39,9 @@ export class StudentAdd {
   @IsString()
   mother_name: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  alternate_no: string;
+  alternate_number: string;
 
   @IsNotEmpty()
   @IsString()
@@ -61,25 +61,25 @@ export class StudentAdd {
 
   @IsNotEmpty()
   @IsString()
-  pincode: number;
+  pincode: string;
 
   @IsNotEmpty()
   @IsString()
-  country_code: number;
+  country_code: string;
 
   @IsOptional()
   @IsString()
-  guardian_name: number;
+  guardian_name: string;
 
   @IsOptional()
   @IsString()
-  guardian_relation: number;
+  guardian_relation: string;
 
   @IsNotEmpty()
   @IsString()
-  uid: number;
+  uid: string;
 
   @IsNotEmpty()
   @IsString()
-  class_id: number;
+  class_id: string;
 }

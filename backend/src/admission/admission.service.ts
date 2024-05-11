@@ -45,15 +45,34 @@ export class AdmissionService {
 
       console.log('image saved');
 
-      await this.prisma.user.create({
-        data: {
-          image_url: imagePath,
-          name: data.first_name + ' ' + data.last_name,
-          email: data.email,
-          password: await stringToPassword(data.mobile_no),
-          mobileNo: data.mobile_no,
-          role: 'STUDENT',
-        },
+      await this.prisma.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            image_url: imagePath as string,
+            name: data.first_name + ' ' + data.last_name,
+            email: data.email,
+            password: await stringToPassword(data.mobile_no),
+            mobileNo: data.mobile_no,
+            role: 'STUDENT',
+          },
+        });
+
+        if (!user) return false;
+
+        const clone = structuredClone(data);
+        delete clone.email;
+        delete clone.mobile_no;
+        delete clone.student_image;
+
+        await tx.student_Details.create({
+          data: {
+            ...(clone as any),
+            student_id: user.user_id,
+            pincode: parseInt(clone.pincode),
+            country_code: parseInt(clone.country_code),
+            class_id: parseInt(clone.class_id),
+          },
+        });
       });
 
       console.log('user created');

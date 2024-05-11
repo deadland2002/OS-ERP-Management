@@ -26,7 +26,12 @@ export class AdmissionController {
     },
     @Body() data: StudentAdd,
   ) {
-    if (!files || !files.student_image || files.student_image.length === 0) {
+    if (
+      !files ||
+      !files.student_image ||
+      files.student_image.length === 0 ||
+      files.student_image[0].size <= 1000
+    ) {
       return {
         status: HttpStatus.BAD_REQUEST,
         data: '',
@@ -34,6 +39,8 @@ export class AdmissionController {
         error: false,
       };
     }
+
+    console.log(files.student_image[0].size);
 
     return this.classService.newAdmission(files.student_image, data);
   }
