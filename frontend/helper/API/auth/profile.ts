@@ -14,6 +14,7 @@ interface responseType{
         name : string
         email : string
         mobileNo : string
+        image_url : string | null
         role : RolesTypes["roles"]
     },
     message ?: string[],
