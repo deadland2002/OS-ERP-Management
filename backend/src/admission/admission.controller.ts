@@ -9,12 +9,14 @@ import {
 import { AdmissionService } from './admission.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { StudentAdd } from './admission.dto';
+import { Roles } from '../Role/role.decorator';
+import { Role } from '../Role/role.enum';
 
 @Controller()
 export class AdmissionController {
   constructor(private readonly classService: AdmissionService) {}
 
-  // @Roles(Role.Admin, Role.Admission)
+  @Roles(Role.Admin, Role.Admission)
   @Post('admission/new')
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'student_image', maxCount: 1 }]),
