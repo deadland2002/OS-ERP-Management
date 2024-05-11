@@ -1,3 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import "~@flaticon/flaticon-uicons/css/all/all";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body{
+    font-family: "Inter", sans-serif;
+    @apply bg-background text-foreground;
+}
+
+.signInGrad{
+    background: linear-gradient(300deg, hsla(186, 100%, 69%, 1) 0%, hsla(266, 100%, 50%, 1) 100%);
+    background: -moz-linear-gradient(300deg, hsla(186, 100%, 69%, 1) 0%, hsla(266, 100%, 50%, 1) 100%);
+    background: -webkit-linear-gradient(300deg, hsla(186, 100%, 69%, 1) 0%, hsla(266, 100%, 50%, 1) 100%);
+}
+
+i{
+    @apply p-0 m-0 flex justify-center items-center;
+}

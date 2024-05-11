@@ -20,10 +20,10 @@ model User {
   password         String
   mobileNo         String            @unique
   role             Role              @default(TEACHER)
+  image_url        String?
   token            Token?
   student_Details  Student_Details?
   Employee_Details Employee_Details?
-  Teaches          Teaches[]
 }
 
 model Token {
@@ -38,37 +38,62 @@ model Token {
 }
 
 model Student_Details {
-  student_id        Int    @unique
+  student_id        Int      @unique
   class_id          Int
-  rollnumber        BigInt @unique
+  first_name        String
+  middle_name       String
+  last_name         String
+  rollnumber        BigInt?  @unique
   father_name       String
   mother_name       String
-  address           String
   alternate_number  String
+  date_of_birth     DateTime
+  address           String
+  city              String
+  state             String
+  pincode           Int
+  country_code      Int
   guardian_name     String
   guardian_relation String
-  studentRelation   User   @relation(fields: [student_id], references: [user_id])
-  classRelation     Class  @relation(fields: [class_id], references: [class_id])
+  uid               String   @unique
+  uid_type          String
+  studentRelation   User     @relation(fields: [student_id], references: [user_id])
+  classRelation     Class    @relation(fields: [class_id], references: [class_id])
 }
 
 model Employee_Details {
-  employee_id          Int     @unique
-  address              String
-  alternate_mob_number String
-  guardian_name        String
-  guardian_relation    String
-  uid                  String
-  uid_type             String
-  employeeRelation     User    @relation(fields: [employee_id], references: [user_id])
-  classRelation        Class[]
+  employee_id         Int       @unique
+  first_name          String
+  middle_name         String
+  last_name           String
+  father_name         String
+  mother_name         String
+  alternate_number    String
+  date_of_birth       DateTime
+  address             String
+  city                String
+  state               String
+  pincode             Int
+  country_code        Int
+  guardian_name       String
+  guardian_relation   String
+  uid                 String    @unique
+  uid_type            String
+  employeeRelation    User      @relation(fields: [employee_id], references: [user_id])
+  coordinatorRelation Class[]
+  Teaches             Teaches[]
 }
 
 model Class {
   class_id            Int               @id @default(autoincrement())
   class_name          String            @unique
   capacity            Int
+  total_lectures      Int               @default(0)
+  start_date          DateTime?
+  end_date            DateTime?
   coordinator         Int?
   fees_per_month      Decimal
+  total_months        Int               @default(12)
   coordinatorRelation Employee_Details? @relation(fields: [coordinator], references: [employee_id])
   Student_Details     Student_Details[]
 }
@@ -83,8 +108,8 @@ model Subject {
 model Teaches {
   teacher_id      Int
   subject_id      Int
-  teacherRelation User    @relation(fields: [teacher_id], references: [user_id])
-  subjectRelation Subject @relation(fields: [subject_id], references: [subject_id])
+  teacherRelation Employee_Details @relation(fields: [teacher_id], references: [employee_id])
+  subjectRelation Subject          @relation(fields: [subject_id], references: [subject_id])
 
   @@id([teacher_id, subject_id])
 }

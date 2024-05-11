@@ -15,13 +15,13 @@ export class UserController {
     return this.userService.createUser(userData);
   }
 
-  @Get('user/signIn')
+  @Post('user/signIn')
   async signInUser(@Body() userData: SignInUserDto): Promise<BasicResponse> {
     return this.userService.signIn(userData);
   }
 
   @Roles()
-  @Get('user/signOut')
+  @Post('user/signOut')
   async signOutUser(@Request() req: Request): Promise<BasicResponse> {
     return this.userService.signOut(req.headers['authorization']);
   }

@@ -7,6 +7,7 @@ import * as process from 'node:process';
 import { UserSignIn } from '../../interface/User/SignIn';
 import { v4 as uuid4 } from 'uuid';
 import errorHandler from '../../helper/errorHandler';
+import stringToPassword from "../../helper/stringToPassword";
 
 @Injectable()
 export class UserService {
@@ -14,8 +15,7 @@ export class UserService {
 
   async createUser(data: CreateUserDto): Promise<BasicResponse> {
     try {
-      const salt = await bcrypt.genSalt(Number(process.env.SALT_ROUNDS));
-      data.password = await bcrypt.hash(data.password, salt);
+      data.password = await stringToPassword(data.password);
       console.log(data);
       const dbRes = await this.prisma.user.create({
         data,
@@ -53,13 +53,14 @@ export class UserService {
       };
     delete dbRes.password;
     const token = uuid4();
+    const exp_at = Date.now() + 1 * 60 * 60 * 1000;
+
     try {
       const tokenExist = await this.prisma.token.findFirst({
         where: {
           user_id: dbRes.user_id,
         },
       });
-      const exp_at = Date.now() + 1 * 60 * 60 * 1000;
       const tokenObj = {
         token: token,
         user_id: dbRes.user_id,
@@ -85,6 +86,7 @@ export class UserService {
     const result: UserSignIn = {
       ...dbRes,
       token: token,
+      expiry: exp_at,
     };
     return { status: HttpStatus.OK, data: result, error: false };
   }

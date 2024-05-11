@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "start:frontend": "cd frontend && npm run dev",
+    "start:backend": "cd backend && npm run start:dev",
+    "install:all": "install:frontend && install:backend",
+    "install:frontend": "cd frontend && npm i",
+    "install:backend": "cd backend && npm i"
+  },
+  "dependencies": {
+    "@nestjs/serve-static": "^4.0.2",
+    "@types/multer": "^1.4.11",
+    "jsonwebtoken": "^9.0.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6"
+  }
+}
