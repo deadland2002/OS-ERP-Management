@@ -30,10 +30,22 @@ See the [GNU General Public License](https://github.com/deadland2002/OS-ERP-Mana
 ## 🙏🏽 Support
 
 This project needs a star️ from you. Don't forget to leave a star✨
-Follow my Github for content
+Follow my GitHub for content
 <br>
 <br>
 <hr>
 <h6 align="center">© Satvik Shukla 2024 
 <br>
 All Rights Reserved</h6>
+
+## Contributors
+<div style="display: flex;flex-wrap: wrap;gap: 15px">
+    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
+        <img src="/contributors/satvik_shukla.jpg" alt="satvik_shukla" style="border-radius: 1000px;aspect-ratio: 1;object-fit: cover;width: 50px"/>
+        <span>Satvik Shukla</span>
+    </div>
+    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
+        <img src="/contributors/ayush_agihotri.jpg" alt="ayush_agnihotri" style="border-radius: 1000px;aspect-ratio: 1;object-fit: cover;width: 50px"/>
+        <span>Ayush Agnihotri</span>
+    </div>
+</div>
