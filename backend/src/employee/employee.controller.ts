@@ -14,14 +14,6 @@ export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
   @Roles(Role.Admin)
-  @Post('employee/update')
-  async signUpUser(
-    @Body() userData: UpdateEmployeeDetailsDto,
-  ): Promise<BasicResponse> {
-    return this.employeeService.updateDetails(userData);
-  }
-
-  @Roles(Role.Admin)
   @Post('employee/assign/class')
   async assignClass(
     @Body() userData: AssignEmployeeClassDto,

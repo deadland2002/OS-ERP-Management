@@ -2,18 +2,18 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { BasicResponse } from '../../interface/response/basic';
 import errorHandler from '../../helper/errorHandler';
-import { StudentAdd } from './admission.dto';
+import { Employee_Add } from './management.dto';
 import saveFile from '../../helper/saveFile';
 import stringToPassword from '../../helper/stringToPassword';
 import deleteFile from '../../helper/deleteFile';
 
 @Injectable()
-export class AdmissionService {
+export class ManagementService {
   constructor(private prisma: PrismaService) {}
 
-  async newAdmission(
+  async new_employee(
     file: Express.Multer.File[],
-    data: StudentAdd,
+    data: Employee_Add,
   ): Promise<BasicResponse> {
     let imagePath: string | boolean = false;
 
@@ -28,22 +28,22 @@ export class AdmissionService {
         return {
           status: HttpStatus.BAD_REQUEST,
           data: '',
-          message: ['user exist'],
+          message: ['employee exist'],
           error: false,
         };
       }
 
-      imagePath = await saveFile(file, 'STUDENT');
+      imagePath = await saveFile(file, 'TEACHER');
 
       if (!imagePath)
         return {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           data: '',
-          message: ['student image not saved'],
+          message: ['teacher image not saved'],
           error: false,
         };
 
-      console.log('image saved');
+      console.log('image saved', imagePath);
 
       await this.prisma.$transaction(async (tx) => {
         const user = await tx.user.create({
@@ -53,7 +53,7 @@ export class AdmissionService {
             email: data.email,
             password: await stringToPassword(data.mobile_no),
             mobileNo: data.mobile_no,
-            role: 'STUDENT',
+            role: 'TEACHER',
           },
         });
 
@@ -62,15 +62,14 @@ export class AdmissionService {
         const clone = structuredClone(data);
         delete clone.email;
         delete clone.mobile_no;
-        delete clone.student_image;
+        delete clone.employee_image;
 
-        await tx.student_Details.create({
+        await tx.employee_Details.create({
           data: {
             ...(clone as any),
-            student_id: user.user_id,
+            employee_id: user.user_id,
             pincode: parseInt(clone.pincode),
             country_code: parseInt(clone.country_code),
-            class_id: parseInt(clone.class_id),
           },
         });
       });
@@ -86,6 +85,7 @@ export class AdmissionService {
       console.log('error occured');
       if (imagePath) {
         await deleteFile(imagePath);
+        console.log('file deleted', imagePath);
       }
       return errorHandler(err);
     }

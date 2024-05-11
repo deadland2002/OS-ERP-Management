@@ -15,7 +15,7 @@ const SideBar = (prop:Props) => {
                 <span className={`flex text-center justify-center lg:hidden`}>W</span>
             </div>
 
-            <div className={`w-full flex flex-col gap-1 relative`}>
+            <div className={`w-full flex flex-col gap-1 relative max-h-[calc(100vh-70px)] overflow-auto`}>
                 {
                     prop.links.map((link)=>(
                         <Link href={link.path} key={link.path} className={`px-2 h-[40px] py-1 hover:bg-gray-200 rounded-md text-sm border-b-2 rounded-b-none text-gray-700 flex items-center gap-1`}>

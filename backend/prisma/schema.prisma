@@ -24,7 +24,6 @@ model User {
   token            Token?
   student_Details  Student_Details?
   Employee_Details Employee_Details?
-  Teaches          Teaches[]
 }
 
 model Token {
@@ -63,21 +62,33 @@ model Student_Details {
 }
 
 model Employee_Details {
-  employee_id          Int     @unique
-  address              String
-  alternate_mob_number String
-  guardian_name        String
-  guardian_relation    String
-  uid                  String
-  uid_type             String
-  employeeRelation     User    @relation(fields: [employee_id], references: [user_id])
-  classRelation        Class[]
+  employee_id         Int       @unique
+  first_name          String
+  middle_name         String
+  last_name           String
+  father_name         String
+  mother_name         String
+  alternate_number    String
+  date_of_birth       DateTime
+  address             String
+  city                String
+  state               String
+  pincode             Int
+  country_code        Int
+  guardian_name       String
+  guardian_relation   String
+  uid                 String    @unique
+  uid_type            String
+  employeeRelation    User      @relation(fields: [employee_id], references: [user_id])
+  coordinatorRelation Class[]
+  Teaches             Teaches[]
 }
 
 model Class {
   class_id            Int               @id @default(autoincrement())
   class_name          String            @unique
   capacity            Int
+  total_lectures      Int               @default(0)
   coordinator         Int?
   fees_per_month      Decimal
   coordinatorRelation Employee_Details? @relation(fields: [coordinator], references: [employee_id])
@@ -94,8 +105,8 @@ model Subject {
 model Teaches {
   teacher_id      Int
   subject_id      Int
-  teacherRelation User    @relation(fields: [teacher_id], references: [user_id])
-  subjectRelation Subject @relation(fields: [subject_id], references: [subject_id])
+  teacherRelation Employee_Details @relation(fields: [teacher_id], references: [employee_id])
+  subjectRelation Subject          @relation(fields: [subject_id], references: [subject_id])
 
   @@id([teacher_id, subject_id])
 }

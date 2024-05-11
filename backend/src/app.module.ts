@@ -8,9 +8,16 @@ import { RolesGuard } from './Role/role.guard';
 import { PrismaService } from './prisma.service';
 import { EmployeeModule } from './employee/employee.module';
 import { AdmissionModule } from './admission/admission.module';
+import { ManagementModule } from './management/management.module';
 
 @Module({
-  imports: [UserModule, ClassModule, EmployeeModule, AdmissionModule],
+  imports: [
+    UserModule,
+    ClassModule,
+    EmployeeModule,
+    AdmissionModule,
+    ManagementModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
