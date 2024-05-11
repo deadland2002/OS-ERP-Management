@@ -50,7 +50,7 @@ All Rights Reserved</h6>
   <tr>
     <td align="center">
         <a href="/contributors/satvik_shukla.jpg">
-            <img src="contributors/satvik_shukla.jpg" width="100px;" alt=""/>
+            <img src="contributors/satvik_shukla.jpg" width="50px;" alt=""/>
             <br />
             <sub><b>Satvik SHukla</b></sub>
         </a>
@@ -58,7 +58,7 @@ All Rights Reserved</h6>
     </td>
     <td align="center">
         <a href="/contributors/ayush_agihotri.jpg">
-            <img src="contributors/ayush_agihotri.jpg" width="100px;" alt=""/>
+            <img src="contributors/ayush_agihotri.jpg" width="50px;" alt=""/>
             <br />
             <sub><b>Ayush Agnihotri</b></sub>
         </a>
