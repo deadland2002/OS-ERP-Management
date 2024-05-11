@@ -3,23 +3,26 @@
 import axios from "axios";
 import {cookies} from "next/headers";
 import { SimpleLog } from "@satvikshukla/beautify-console";
+import {SaveToken} from "../../Token/jwt";
 
 interface requestType{
     email:string,
     password:string
 }
 
+export interface UserSignInReturn{
+    user_id : string
+    name : string
+    email : string
+    mobileNo : string
+    role : string
+    token : string
+    expiry:string
+}
+
 interface responseType{
     error: boolean,
-    data ?: {
-        user_id : string
-        name : string
-        email : string
-        mobileNo : string
-        role : string
-        token : string
-        expiry:string
-    },
+    data ?: UserSignInReturn,
     message ?: string[],
     status_code: number
 }
@@ -36,9 +39,7 @@ const API_Auth_SignIn = async (data:requestType) : Promise<responseType> =>{
             cookieFactory.set("accessToken",response.data.token , {
                 expires : expiryDate
             })
-            cookieFactory.set("accessToken",response.data.token , {
-                expires : expiryDate
-            })
+            await SaveToken(response.data);
         }
         return  response;
     }catch (e){
