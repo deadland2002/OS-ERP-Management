@@ -33,7 +33,7 @@ export class ManagementService {
         };
       }
 
-      imagePath = await saveFile(file, 'TEACHER');
+      imagePath = await saveFile(file, data.role);
 
       if (!imagePath)
         return {
@@ -53,7 +53,7 @@ export class ManagementService {
             email: data.email,
             password: await stringToPassword(data.mobile_no),
             mobileNo: data.mobile_no,
-            role: 'TEACHER',
+            role: data.role,
           },
         });
 
@@ -63,6 +63,7 @@ export class ManagementService {
         delete clone.email;
         delete clone.mobile_no;
         delete clone.employee_image;
+        delete clone.role;
 
         await tx.employee_Details.create({
           data: {

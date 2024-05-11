@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {IsEnum, IsNotEmpty, IsOptional, IsString} from 'class-validator';
+import {Role} from "@prisma/client";
 
 export class Employee_Add {
   @IsOptional()
@@ -60,6 +61,14 @@ export class Employee_Add {
   @IsNotEmpty()
   @IsString()
   country_code: string;
+
+  @IsNotEmpty()
+  @IsEnum({
+    TEACHER: Role.TEACHER,
+    ACCOUNTS: Role.ACCOUNTS,
+    MANAGEMENT: Role.MANAGEMENT,
+  })
+  role: Role;
 
   @IsOptional()
   @IsString()
