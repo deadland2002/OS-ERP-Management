@@ -9,6 +9,7 @@ import { PrismaService } from './prisma.service';
 import { EmployeeModule } from './employee/employee.module';
 import { AdmissionModule } from './admission/admission.module';
 import { ManagementModule } from './management/management.module';
+import { SubjectModule } from './subject/subject.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ManagementModule } from './management/management.module';
     EmployeeModule,
     AdmissionModule,
     ManagementModule,
+    SubjectModule,
   ],
   controllers: [AppController],
   providers: [

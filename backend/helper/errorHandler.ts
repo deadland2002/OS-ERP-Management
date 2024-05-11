@@ -2,8 +2,6 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { HttpStatus } from '@nestjs/common';
 
 function handleError(err: Error) {
-  console.log(err)
-
   if (err instanceof PrismaClientKnownRequestError) {
     if (err.code === 'P2002') {
       const arrOfTarget = err.meta.target as string[];
@@ -22,6 +20,13 @@ function handleError(err: Error) {
         message: [`values does not satisfy relation`],
         error: true,
       };
+    } else if (err.code === 'P2025') {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        data: {},
+        message: [`Record does not exist`],
+        error: true,
+      };
     }
   } else {
     return {
@@ -32,6 +37,7 @@ function handleError(err: Error) {
     };
   }
 
+  console.log(err);
   return {
     status: HttpStatus.BAD_REQUEST,
     data: {},

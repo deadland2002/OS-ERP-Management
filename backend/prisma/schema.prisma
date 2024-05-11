@@ -101,7 +101,7 @@ model Class {
 model Subject {
   subject_id   Int       @id @default(autoincrement())
   subject_name String
-  subject_code String
+  subject_code String?   @unique
   Teaches      Teaches[]
 }
 
