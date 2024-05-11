@@ -62,7 +62,7 @@ model Student_Details {
 }
 
 model Employee_Details {
-  employee_id         Int       @unique
+  employee_id         Int         @unique
   first_name          String
   middle_name         String
   last_name           String
@@ -77,11 +77,13 @@ model Employee_Details {
   country_code        Int
   guardian_name       String
   guardian_relation   String
-  uid                 String    @unique
+  uid                 String      @unique
   uid_type            String
-  employeeRelation    User      @relation(fields: [employee_id], references: [user_id])
+  salary              Int         @default(0)
+  employeeRelation    User        @relation(fields: [employee_id], references: [user_id])
   coordinatorRelation Class[]
   Teaches             Teaches[]
+  TimeTable           TimeTable[]
 }
 
 model Class {
@@ -96,13 +98,15 @@ model Class {
   total_months        Int               @default(12)
   coordinatorRelation Employee_Details? @relation(fields: [coordinator], references: [employee_id])
   Student_Details     Student_Details[]
+  TimeTable           TimeTable[]
 }
 
 model Subject {
-  subject_id   Int       @id @default(autoincrement())
+  subject_id   Int         @id @default(autoincrement())
   subject_name String
-  subject_code String?   @unique
+  subject_code String?     @unique
   Teaches      Teaches[]
+  TimeTable    TimeTable[]
 }
 
 model Teaches {
@@ -114,6 +118,22 @@ model Teaches {
   @@id([teacher_id, subject_id])
 }
 
+model TimeTable {
+  class_id         Int
+  day              Days
+  lecture          Int
+  subject_id       Int
+  teacher_id       Int
+  teacher_name     String
+  subject_name     String
+  class_name       String
+  subject_relation Subject          @relation(fields: [subject_id], references: [subject_id])
+  teacher_relation Employee_Details @relation(fields: [teacher_id], references: [employee_id])
+  class_relation   Class            @relation(fields: [class_id], references: [class_id])
+
+  @@id([class_id, day, lecture])
+}
+
 enum Role {
   TEACHER
   ADMIN
@@ -121,4 +141,14 @@ enum Role {
   STUDENT
   ADMISSION
   MANAGEMENT
+}
+
+enum Days {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }
