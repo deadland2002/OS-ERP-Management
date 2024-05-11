@@ -54,9 +54,3 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-./public/files/ACCOUNTS/*
-./public/files/ADMIN/*
-./public/files/ADMISSION/*
-./public/files/MANAGEMENT/*
-./public/files/STUDENT/*
-./public/files/TEACHER/*

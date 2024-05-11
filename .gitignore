@@ -1,1 +1,6 @@
 .idea
+./backend/public/files/STUDENT/*
+./backend/public/files/ACCOUNTS/*
+./backend/public/files/MANAGEMENT/*
+./backend/public/files/ADMIN/*
+./backend/public/files/ADMISSION/*
