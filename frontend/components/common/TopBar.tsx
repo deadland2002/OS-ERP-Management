@@ -15,10 +15,7 @@ const TopBar = (prop: Props) => {
     const HandleSignOut = async () =>{
         const promise = new Promise(async (resolve, reject) => {
             const response = await API_Auth_Sign_Out();
-            if (response.error || response.message)
-                reject(response.message);
-            else
-                resolve(1);
+            location.href = "/"
         });
 
         toast

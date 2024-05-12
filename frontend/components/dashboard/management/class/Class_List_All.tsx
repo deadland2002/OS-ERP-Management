@@ -31,7 +31,7 @@ const ClassListAll = (prop: Props) => {
           New
         </Button>
       </div>
-      <div className={`flex justify-center max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-250px)] overflow-auto min-h-[calc(100vh-100px)]`}>
+      <div className={`max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-250px)] overflow-auto min-h-[calc(100vh-150px)]`}>
         <div className={`flex items-center flex-col w-[1100px] gap-2`}>
           <div className={`flex gap-2 w-full font-semibold bg-blue-50 rounded-md px-2 py-1`}>
             <span className={`min-w-[50px]`}>S No.</span>
