@@ -2,7 +2,11 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { BasicResponse } from '../../interface/response/basic';
 import errorHandler from '../../helper/errorHandler';
-import { Employee_Add, Employee_Update } from './employee.dto';
+import {
+  Employee_Add,
+  Employee_Update,
+  GetEmployeeForTimetable,
+} from './employee.dto';
 import saveFile from '../../helper/saveFile';
 import stringToPassword from '../../helper/stringToPassword';
 import deleteFile from '../../helper/deleteFile';
@@ -164,6 +168,51 @@ export class EmployeeService {
       return {
         status: HttpStatus.OK,
         data: list,
+        error: false,
+      };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async get_free_employee_for_timetable(
+    data: GetEmployeeForTimetable,
+  ): Promise<BasicResponse> {
+    try {
+      const list = await this.prisma.employee_Details.findMany({
+        where: {
+          TimeTable: {
+            none: {
+              day: data.day,
+              lecture: data.lecture,
+            },
+          },
+          employeeRelation: {
+            role: 'TEACHER',
+          },
+        },
+        select: {
+          employee_id: true,
+          first_name: true,
+          last_name: true,
+        },
+      });
+
+      const newList = [];
+      for (const entry of list)
+        newList.push({
+          id: entry.employee_id,
+          name:
+            entry.first_name +
+            ' ' +
+            entry.last_name +
+            ' : ' +
+            entry.employee_id,
+        });
+
+      return {
+        status: HttpStatus.OK,
+        data: newList,
         error: false,
       };
     } catch (err) {

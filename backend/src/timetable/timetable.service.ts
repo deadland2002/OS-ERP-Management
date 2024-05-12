@@ -218,4 +218,68 @@ export class TimetableService {
       return errorHandler(err);
     }
   }
+
+  async get_empty_class(): Promise<BasicResponse> {
+    try {
+      const classes = await this.prisma.class.findMany({
+        where: {
+          TimeTable: {
+            none: {},
+          },
+        },
+        select: {
+          class_id: true,
+          class_name: true,
+        },
+      });
+
+      if (classes)
+        return {
+          status: HttpStatus.OK,
+          data: classes,
+          error: false,
+        };
+      else
+        return {
+          status: HttpStatus.NOT_FOUND,
+          data: '',
+          message: ['Classes not found'],
+          error: false,
+        };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async get_initialised_class(): Promise<BasicResponse> {
+    try {
+      const classes = await this.prisma.class.findMany({
+        where: {
+          TimeTable: {
+            some: {},
+          },
+        },
+        select: {
+          class_id: true,
+          class_name: true,
+        },
+      });
+
+      if (classes)
+        return {
+          status: HttpStatus.OK,
+          data: classes,
+          error: false,
+        };
+      else
+        return {
+          status: HttpStatus.NOT_FOUND,
+          data: '',
+          message: ['Classes not found'],
+          error: false,
+        };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
 }

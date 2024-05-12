@@ -9,7 +9,11 @@ import {
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { Employee_Add, Employee_Update } from './employee.dto';
+import {
+  Employee_Add,
+  Employee_Update,
+  GetEmployeeForTimetable,
+} from './employee.dto';
 import { Roles } from '../Role/role.decorator';
 import { Role } from '../Role/role.enum';
 import { UpdateClassDetails } from '../class/class.dto';
@@ -66,5 +70,13 @@ export class EmployeeController {
   @Get('employee/get_assigned_coordinator')
   async get_assigned_coordinator(): Promise<BasicResponse> {
     return this.employeeService.get_assigned_coordinator();
+  }
+
+  @Roles(Role.Admin, Role.Management)
+  @Get('employee/get_free_employee_for_timetable')
+  async get_free_employee_for_timetable(
+    @Body() data: GetEmployeeForTimetable,
+  ): Promise<BasicResponse> {
+    return this.employeeService.get_free_employee_for_timetable(data);
   }
 }

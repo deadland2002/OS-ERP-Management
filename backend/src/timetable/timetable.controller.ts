@@ -52,4 +52,16 @@ export class TimetableController {
   async get_by_teacher(): Promise<BasicResponse> {
     return this.timetableService.get_by_teacher();
   }
+
+  @Roles(Role.Admin, Role.Admission, Role.Management)
+  @Get('timetable/get_empty_class')
+  async get_empty_class(): Promise<BasicResponse> {
+    return this.timetableService.get_empty_class();
+  }
+
+  @Roles(Role.Admin, Role.Admission, Role.Management)
+  @Get('timetable/get_initialised_class')
+  async get_initialised_class(): Promise<BasicResponse> {
+    return this.timetableService.get_initialised_class();
+  }
 }

@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Role } from '@prisma/client';
+import { Days, Role } from '@prisma/client';
 
 export class Employee_Add {
   @IsOptional()
@@ -172,4 +172,14 @@ export class Employee_Update {
   @IsOptional()
   @IsString()
   uid: string;
+}
+
+export class GetEmployeeForTimetable {
+  @IsNotEmpty()
+  @IsNumber()
+  lecture: number;
+
+  @IsNotEmpty()
+  @IsEnum(Days)
+  day: Days;
 }
