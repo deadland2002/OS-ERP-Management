@@ -10,6 +10,7 @@ import { AdmissionModule } from './admission/admission.module';
 import { SubjectModule } from './subject/subject.module';
 import { TimetableModule } from './timetable/timetable.module';
 import { EmployeeModule } from './employee/employee.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { EmployeeModule } from './employee/employee.module';
     SubjectModule,
     TimetableModule,
     EmployeeModule,
+    StudentModule,
   ],
   controllers: [AppController],
   providers: [
