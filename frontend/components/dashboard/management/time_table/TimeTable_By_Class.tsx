@@ -3,11 +3,9 @@
 import React, { useEffect } from "react";
 import {
   API_Get_TimeTable_By_Class,
-  Time_Table_By_Class_Type,
 } from "../../../../helper/API/time_table/get_timetable_by_class";
 import { toast } from "react-toastify";
 import { toastCompactTheme } from "../../../../Default/toast";
-import {ClassList} from "../../../../helper/API/class/get_class_list";
 import {Button} from "@nextui-org/react";
 
 interface classTimeTable {
@@ -132,7 +130,7 @@ const TimeTableByClass = () => {
             <Button size={'sm'} variant={'flat'} color={'primary'}>Add</Button>
         </div>
 
-        <div className={`w-[calc(100vw-300px)]`}>
+        <div className={`w-[calc(100vw-250px)] overflow-auto min-h-[calc(100vh-250px)]`}>
           <div className={`min-w-[1250px]`}>
             <div className={`w-full flex flex-col gap-10 pb-5`}>
               {Object.keys(timeTable).map((key, index1) => (

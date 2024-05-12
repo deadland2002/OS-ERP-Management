@@ -2,6 +2,7 @@
 
 import React, {useEffect} from 'react';
 import TimeTableByClass from "../../../../../components/dashboard/management/time_table/TimeTable_By_Class";
+import TimeTableByTeacher from "../../../../../components/dashboard/management/time_table/TimeTable_By_Teacher";
 
 const Page = () => {
     const [selectedCategory, setSelectedCategory] = React.useState<"CLASS"|"TEACHER"|"">("");
@@ -10,6 +11,8 @@ const Page = () => {
     useEffect(() => {
         if(selectedCategory==="CLASS")
             setOptionalMounted(<TimeTableByClass />)
+        if(selectedCategory==="TEACHER")
+            setOptionalMounted(<TimeTableByTeacher />)
     }, [selectedCategory]);
 
     return (

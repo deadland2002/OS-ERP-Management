@@ -51,8 +51,8 @@ export class TimetableService {
           class_id: data.class_id,
           subject_id: data.subject_id,
           teacher_id: data.teacher_id,
-          class_id_day_lecture: {
-            class_id: data.class_id,
+          teacher_id_day_lecture: {
+            teacher_id: data.teacher_id,
             day: data.days,
             lecture: data.lecture,
           },
@@ -103,10 +103,12 @@ export class TimetableService {
             ...fields,
           };
 
-          if (ans[fields.teacher_name]) {
-            ans[fields.teacher_name].push(temp);
+          const modified_name = `${fields.teacher_name} : ${fields.teacher_id}`;
+
+          if (ans[modified_name]) {
+            ans[modified_name].push(temp);
           } else {
-            ans[fields.teacher_name] = [temp];
+            ans[modified_name] = [temp];
           }
         }
 

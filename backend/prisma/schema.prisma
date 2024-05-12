@@ -131,7 +131,8 @@ model TimeTable {
   teacher_relation Employee_Details @relation(fields: [teacher_id], references: [employee_id])
   class_relation   Class            @relation(fields: [class_id], references: [class_id])
 
-  @@id([class_id, day, lecture])
+  @@id([teacher_id, day, lecture])
+  @@unique([class_id, day, lecture])
 }
 
 enum Role {
