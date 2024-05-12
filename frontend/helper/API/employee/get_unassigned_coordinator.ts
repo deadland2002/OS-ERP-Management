@@ -7,26 +7,20 @@ import { SimpleLog } from "@satvikshukla/beautify-console";
 interface requestType{
 }
 
-export interface ClassList{
-    class_id : number
-    class_name : string
-    capacity : number
-    coordinator : number | null
-    fees_per_month : string
-    start_date: string | null
-    end_date: string | null
-    total_months: string | null
-    total_lectures: string | null
+interface UnAssignedCoordinatorList{
+    employee_id : number
+    first_name : string
+    last_name : string
 }
 
 interface responseType{
     error: boolean,
-    data ?: ClassList[],
+    data ?: UnAssignedCoordinatorList[],
     message ?: string[],
     status_code: number
 }
 
-const API_Class_Get_List = async () : Promise<responseType> =>{
+const API_UnAssigned_Coordinator_List = async () : Promise<responseType> =>{
     const cookieFactory = cookies()
     const accessToken = cookieFactory.get("accessToken")?.value;
 
@@ -38,16 +32,16 @@ const API_Class_Get_List = async () : Promise<responseType> =>{
         }
 
     try{
-        SimpleLog.info(`[ CALLED ] : API_Class_Get_List :`)
-        const response:responseType =  await axios.get(process.env.BACKEND_URL + "/v1/class/get_all", {
+        SimpleLog.info(`[ CALLED ] : API_UnAssigned_Coordinator_List :`)
+        const response:responseType =  await axios.get(process.env.BACKEND_URL + "/v1/employee/get_unassigned_coordinator", {
             headers:{
                 authorization: accessToken,
             }
         }).then(res => res.data);
-        SimpleLog.info(`[ RETURN ] : API_Class_Get_List : ${JSON.stringify(response)}`)
+        SimpleLog.info(`[ RETURN ] : API_UnAssigned_Coordinator_List : ${JSON.stringify(response)}`)
         return  response;
     }catch (e){
-        SimpleLog.error(`[ ERROR ] : API_Class_Get_List : ${JSON.stringify(e)}`)
+        SimpleLog.error(`[ ERROR ] : API_UnAssigned_Coordinator_List : ${JSON.stringify(e)}`)
         return {
             error : true,
             status_code : 501,
@@ -56,6 +50,6 @@ const API_Class_Get_List = async () : Promise<responseType> =>{
     }
 }
 
-export type {ClassList as Class_Get_List_Type}
+export type {UnAssignedCoordinatorList as UnAssigned_Coordinator_List}
 
-export {API_Class_Get_List}
+export {API_UnAssigned_Coordinator_List}

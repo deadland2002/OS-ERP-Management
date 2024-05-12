@@ -5,28 +5,24 @@ import {cookies} from "next/headers";
 import { SimpleLog } from "@satvikshukla/beautify-console";
 
 interface requestType{
-}
-
-export interface ClassList{
-    class_id : number
     class_name : string
     capacity : number
-    coordinator : number | null
-    fees_per_month : string
-    start_date: string | null
-    end_date: string | null
-    total_months: string | null
-    total_lectures: string | null
+    fees_per_month : number
+    total_months : number
+    coordinator ?: number
+    total_lectures ?: number
+    start_date ?: string
+    end_date ?: string
 }
 
 interface responseType{
     error: boolean,
-    data ?: ClassList[],
+    data ?: string,
     message ?: string[],
     status_code: number
 }
 
-const API_Class_Get_List = async () : Promise<responseType> =>{
+const API_Class_Add_New = async (data:requestType) : Promise<responseType> =>{
     const cookieFactory = cookies()
     const accessToken = cookieFactory.get("accessToken")?.value;
 
@@ -38,16 +34,16 @@ const API_Class_Get_List = async () : Promise<responseType> =>{
         }
 
     try{
-        SimpleLog.info(`[ CALLED ] : API_Class_Get_List :`)
-        const response:responseType =  await axios.get(process.env.BACKEND_URL + "/v1/class/get_all", {
+        SimpleLog.info(`[ CALLED ] : API_Class_Add_New :`)
+        const response:responseType =  await axios.post(process.env.BACKEND_URL + "/v1/class/create",data,{
             headers:{
                 authorization: accessToken,
             }
         }).then(res => res.data);
-        SimpleLog.info(`[ RETURN ] : API_Class_Get_List : ${JSON.stringify(response)}`)
+        SimpleLog.info(`[ RETURN ] : API_Class_Add_New : ${JSON.stringify(response)}`)
         return  response;
     }catch (e){
-        SimpleLog.error(`[ ERROR ] : API_Class_Get_List : ${JSON.stringify(e)}`)
+        SimpleLog.error(`[ ERROR ] : API_Class_Add_New : ${JSON.stringify(e)}`)
         return {
             error : true,
             status_code : 501,
@@ -56,6 +52,6 @@ const API_Class_Get_List = async () : Promise<responseType> =>{
     }
 }
 
-export type {ClassList as Class_Get_List_Type}
+export type {requestType as API_Class_Add_New_Req}
 
-export {API_Class_Get_List}
+export {API_Class_Add_New}

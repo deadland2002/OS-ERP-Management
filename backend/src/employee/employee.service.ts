@@ -2,13 +2,14 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { BasicResponse } from '../../interface/response/basic';
 import errorHandler from '../../helper/errorHandler';
-import { Employee_Add } from './management.dto';
+import { Employee_Add, Employee_Update } from './employee.dto';
 import saveFile from '../../helper/saveFile';
 import stringToPassword from '../../helper/stringToPassword';
 import deleteFile from '../../helper/deleteFile';
+import { UpdateClassDetails } from '../class/class.dto';
 
 @Injectable()
-export class ManagementService {
+export class EmployeeService {
   constructor(private prisma: PrismaService) {}
 
   async new_employee(
@@ -88,6 +89,84 @@ export class ManagementService {
         await deleteFile(imagePath);
         console.log('file deleted', imagePath);
       }
+      return errorHandler(err);
+    }
+  }
+
+  async update_details(data: Employee_Update): Promise<BasicResponse> {
+    try {
+      const { employee_id, ...rest } = data;
+      await this.prisma.employee_Details.update({
+        where: {
+          employee_id: employee_id,
+        },
+        data: {
+          ...rest,
+        },
+      });
+
+      return {
+        status: HttpStatus.CREATED,
+        data: 'Employee updated successfully',
+        error: false,
+      };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async get_unassigned_coordinator(): Promise<BasicResponse> {
+    try {
+      const list = await this.prisma.employee_Details.findMany({
+        where: {
+          coordinatorRelation: {
+            none: {},
+          },
+        },
+        select: {
+          employee_id: true,
+          first_name: true,
+          last_name: true,
+        },
+      });
+
+      return {
+        status: HttpStatus.OK,
+        data: list,
+        error: false,
+      };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async get_assigned_coordinator(): Promise<BasicResponse> {
+    try {
+      const list = await this.prisma.employee_Details.findMany({
+        where: {
+          coordinatorRelation: {
+            some: {},
+          },
+        },
+        select: {
+          employee_id: true,
+          first_name: true,
+          last_name: true,
+          coordinatorRelation: {
+            select: {
+              class_id: true,
+              class_name: true,
+            },
+          },
+        },
+      });
+
+      return {
+        status: HttpStatus.OK,
+        data: list,
+        error: false,
+      };
+    } catch (err) {
       return errorHandler(err);
     }
   }

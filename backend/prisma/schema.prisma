@@ -93,7 +93,7 @@ model Class {
   total_lectures      Int               @default(0)
   start_date          DateTime?
   end_date            DateTime?
-  coordinator         Int?
+  coordinator         Int?              @unique
   fees_per_month      Decimal
   total_months        Int               @default(12)
   coordinatorRelation Employee_Details? @relation(fields: [coordinator], references: [employee_id])

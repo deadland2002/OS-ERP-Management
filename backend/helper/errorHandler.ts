@@ -29,6 +29,7 @@ function handleError(err: Error) {
       };
     }
   } else {
+    console.log(err);
     return {
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       data: {},

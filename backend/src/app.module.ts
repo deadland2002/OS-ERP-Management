@@ -7,18 +7,18 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './Role/role.guard';
 import { PrismaService } from './prisma.service';
 import { AdmissionModule } from './admission/admission.module';
-import { ManagementModule } from './management/management.module';
 import { SubjectModule } from './subject/subject.module';
 import { TimetableModule } from './timetable/timetable.module';
+import { EmployeeModule } from './employee/employee.module';
 
 @Module({
   imports: [
     UserModule,
     ClassModule,
     AdmissionModule,
-    ManagementModule,
     SubjectModule,
     TimetableModule,
+    EmployeeModule,
   ],
   controllers: [AppController],
   providers: [
