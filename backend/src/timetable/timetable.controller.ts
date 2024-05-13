@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { BasicResponse } from '../../interface/response/basic';
 import { TimetableService } from './timetable.service';
 import {
   ClassTimetable,
   CreateTimeTable,
+  DeleteTimetable,
   TeachersTimetable,
 } from './timetable.dto';
 import { Roles } from '../Role/role.decorator';
@@ -17,6 +18,12 @@ export class TimetableController {
   @Post('timetable/create')
   async signUpUser(@Body() data: CreateTimeTable): Promise<BasicResponse> {
     return this.timetableService.create(data);
+  }
+
+  @Roles(Role.Admin, Role.Management)
+  @Delete('timetable/delete')
+  async delete(@Body() data: DeleteTimetable): Promise<BasicResponse> {
+    return this.timetableService.delete(data);
   }
 
   @Roles(Role.Admin, Role.Admission, Role.Management)

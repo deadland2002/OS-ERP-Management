@@ -7,6 +7,7 @@ import {
 import { API_Get_Class_UnInitialised_Timetable } from "../../../../helper/API/time_table/get_uninitialised_class";
 import { toast } from "react-toastify";
 import { toastCompactTheme } from "../../../../Default/toast";
+import TimeTableDeleteData from "./TimeTable_DeleteData";
 
 interface TableProp {
   isFilled: boolean;
@@ -78,20 +79,34 @@ const TimeTableChangeable = (prop: Prop) => {
     const formattedX = event.clientX - 100;
     const formattedY = event.clientY - 50;
 
-    setOptionalMount(
-      <TimeTableFetchData
-        class_name={prop.class_name}
-        onChange={prop.onChange}
-        onLeave={HandleLeave}
-        key={`${formattedX}_${formattedY}`}
-        posX={formattedX}
-        posY={formattedY}
-        class_id={prop.class_id}
-        lecture={data.lecture}
-        day={data.day}
-        subjects={subjectArr}
-      />,
-    );
+    if (data.isFilled)
+      setOptionalMount(
+        <TimeTableDeleteData
+          onChange={prop.onChange}
+          onLeave={HandleLeave}
+          key={`${formattedX}_${formattedY}`}
+          posX={formattedX}
+          posY={formattedY}
+          subjects={subjectArr}
+          class_name={prop.class_name}
+          class_id={prop.class_id}
+          cellData={data}
+        />,
+      );
+    else
+      setOptionalMount(
+        <TimeTableFetchData
+            class_name={prop.class_name}
+            onChange={prop.onChange}
+            onLeave={HandleLeave}
+            key={`${formattedX}_${formattedY}`}
+            posX={formattedX}
+            posY={formattedY}
+            class_id={prop.class_id}
+            subjects={subjectArr}
+            cellData={data}
+        />,
+      );
   };
 
   return (
@@ -102,7 +117,9 @@ const TimeTableChangeable = (prop: Prop) => {
 
       {optionalMount}
 
-      <div className={`max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-300px)] overflow-auto`}>
+      <div
+        className={`max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-300px)] overflow-auto`}
+      >
         <div className={`flex flex-col gap-2 min-w-[1000px] pb-10`}>
           {prop.dataArr.map((item, index: number) => (
             <div key={`${index}`} className={`flex gap-2`}>
@@ -119,7 +136,7 @@ const TimeTableChangeable = (prop: Prop) => {
                   key={`${index}_${index2}`}
                   className={`p-2 text-sm bg-blue-100 ${single.isFilled ? "bg-green-100" : ""} rounded-md w-[120px] h-[80px] flex flex-col justify-between`}
                 >
-                  <span className={``}>{single.teacher_name}</span>
+                  <span className={`text-xs`}>{single.teacher_name}</span>
                   <span className={``}>{single.subject_name}</span>
                 </div>
               ))}

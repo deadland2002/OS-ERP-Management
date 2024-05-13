@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma.service';
 import {
   ClassTimetable,
   CreateTimeTable,
+  DeleteTimetable,
   TeachersTimetable,
   UpdateTimeTable,
 } from './timetable.dto';
@@ -276,6 +277,36 @@ export class TimetableService {
           status: HttpStatus.NOT_FOUND,
           data: '',
           message: ['Classes not found'],
+          error: false,
+        };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async delete(data: DeleteTimetable): Promise<BasicResponse> {
+    try {
+      const classes = await this.prisma.timeTable.delete({
+        where: {
+          teacher_id_day_lecture: {
+            teacher_id: data.teacher_id,
+            day: data.days,
+            lecture: data.lecture,
+          },
+        },
+      });
+
+      if (classes)
+        return {
+          status: HttpStatus.OK,
+          data: classes,
+          error: false,
+        };
+      else
+        return {
+          status: HttpStatus.NOT_FOUND,
+          data: '',
+          message: ['Timetable not found'],
           error: false,
         };
     } catch (err) {

@@ -14,7 +14,7 @@ import { structuredClone } from "next/dist/compiled/@edge-runtime/primitives";
 import { API_Get_Class_Initialised_Timetable } from "../../../../helper/API/time_table/get_initialised_class";
 import { API_Get_TimeTable_Of_Specific_Class } from "../../../../helper/API/time_table/get_specific_class";
 
-interface cellTypes {
+export interface TimeTablecellTypes {
   isFilled: boolean;
   teacher_id: number;
   subject_id: number;
@@ -28,7 +28,7 @@ const TimeTableEdit = () => {
   const [classArr, setClassArr] = useState<TimeTable_Class_UnInitialised[]>([]);
   const [selectedClass, setSelectedClass] =
     useState<TimeTable_Class_UnInitialised | null>(null);
-  const [arrOfTimeTable, setArrOfTimeTable] = useState<cellTypes[][] | [][]>(
+  const [arrOfTimeTable, setArrOfTimeTable] = useState<TimeTablecellTypes[][] | [][]>(
     [],
   );
   const [isClassDataFetched, setIsClassDataFetched] = React.useState(false);
@@ -99,7 +99,7 @@ const TimeTableEdit = () => {
     SATURDAY: 5,
   };
 
-  const HandleAdd = (data: cellTypes) => {
+  const HandleAdd = (data: TimeTablecellTypes) => {
     const clone = JSON.parse(JSON.stringify(arrOfTimeTable));
     clone[days[data.day]][data.lecture - 1] = data;
 
@@ -113,9 +113,11 @@ const TimeTableEdit = () => {
 
       const clone = JSON.parse(JSON.stringify(arrOfTimeTable));
       for (const fields of response.data) {
-        const { class_id, class_name, ...rest } = fields;
+        const { class_id, class_name, teacher_name,teacher_id,...rest } = fields;
         clone[days[fields.day]][fields.lecture - 1] = {
           ...rest,
+          teacher_name:teacher_name + " : " + teacher_id,
+          teacher_id,
           isFilled: true,
         };
       }

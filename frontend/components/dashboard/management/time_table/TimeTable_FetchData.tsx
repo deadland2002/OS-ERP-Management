@@ -6,27 +6,17 @@ import {
 } from "../../../../helper/API/employee/get_free_employee_for_timetable";
 import {All_Subjects_Type} from "../../../../helper/API/subject/subject_get_all";
 import {API_TimeTable_Add_New} from "../../../../helper/API/time_table/add_new";
-
-interface TableProp {
-    isFilled: boolean;
-    teacher_id: number;
-    subject_id: number;
-    teacher_name: string;
-    subject_name: string;
-    lecture: number;
-    day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY";
-}
+import {TimeTablecellTypes} from "./TimeTable_Edit";
 
 interface Props{
     posX : number,
     posY : number,
-    lecture : number
-    day : "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY";
-    class_id : number,
     subjects: All_Subjects_Type[]
     onLeave: ()=>void
-    onChange : (data:TableProp) =>void
-    class_name:string
+    onChange : (data:TimeTablecellTypes) =>void
+    class_id : number,
+    class_name:string,
+    cellData:TimeTablecellTypes
 }
 
 const TimeTableFetchData = (prop:Props) => {
@@ -37,8 +27,8 @@ const TimeTableFetchData = (prop:Props) => {
 
     const getData = async () => {
         const response = await API_TimeTable_Get_FreeTeachers({
-            day:prop.day,
-            lecture:prop.lecture,
+            day:prop.cellData.day,
+            lecture:prop.cellData.lecture,
         });
         if (response.message || !response.data) return;
         setTeacherArray(response.data);
@@ -68,8 +58,8 @@ const TimeTableFetchData = (prop:Props) => {
             teacher_id : tea_id ,
             subject_name : sub_name ,
             teacher_name : tea_name ,
-            days : prop.day ,
-            lecture : prop.lecture ,
+            days : prop.cellData.day ,
+            lecture : prop.cellData.lecture ,
             class_name : prop.class_name ,
         }
 
@@ -81,6 +71,7 @@ const TimeTableFetchData = (prop:Props) => {
             const { days , ...rest } = obj;
             const all_data = {
                 ...rest,
+                teacher_name: tea_name + " : " + tea_id,
                 day : obj.days,
                 isFilled:true
             }

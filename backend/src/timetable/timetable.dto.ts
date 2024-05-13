@@ -76,3 +76,17 @@ export class ClassTimetable {
   @IsNumber()
   class_id: number;
 }
+
+export class DeleteTimetable {
+  @IsNotEmpty()
+  @IsEnum(Days)
+  days: Days;
+
+  @IsNotEmpty()
+  @IsNumber()
+  teacher_id: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  lecture: number;
+}

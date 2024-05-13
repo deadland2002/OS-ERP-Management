@@ -11,22 +11,14 @@ import {
 } from "../../../../helper/API/time_table/get_uninitialised_class";
 import TimeTableChangeable from "./TimeTable_Changeable";
 import {structuredClone} from "next/dist/compiled/@edge-runtime/primitives";
+import {TimeTablecellTypes} from "./TimeTable_Edit";
 
-interface cellTypes {
-  isFilled: boolean;
-  teacher_id: number;
-  subject_id: number;
-  teacher_name: string;
-  subject_name: string;
-  lecture: number;
-  day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY";
-}
 
 const TimeTableNew = () => {
   const [classArr, setClassArr] = useState<TimeTable_Class_UnInitialised[]>([]);
   const [selectedClass, setSelectedClass] =
     useState<TimeTable_Class_UnInitialised | null>(null);
-  const [arrOfTimeTable, setArrOfTimeTable] = useState<cellTypes[][] | [][]>(
+  const [arrOfTimeTable, setArrOfTimeTable] = useState<TimeTablecellTypes[][] | [][]>(
     [],
   );
 
@@ -87,7 +79,7 @@ const TimeTableNew = () => {
     console.log(arr)
   }, []);
 
-  const HandleAdd = (data:cellTypes) =>{
+  const HandleAdd = (data:TimeTablecellTypes) =>{
     const days : Record<string, number> =  {
       MONDAY : 0,
       TUESDAY : 1,
