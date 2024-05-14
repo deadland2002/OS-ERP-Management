@@ -38,12 +38,12 @@ model Token {
 }
 
 model Student_Details {
-  student_id        Int      @unique
+  student_id        Int          @unique
   class_id          Int
   first_name        String
   middle_name       String
   last_name         String
-  rollnumber        BigInt?  @unique
+  rollnumber        BigInt?      @unique
   father_name       String
   mother_name       String
   alternate_number  String
@@ -55,10 +55,11 @@ model Student_Details {
   country_code      Int
   guardian_name     String
   guardian_relation String
-  uid               String   @unique
+  uid               String       @unique
   uid_type          String
-  studentRelation   User     @relation(fields: [student_id], references: [user_id])
-  classRelation     Class    @relation(fields: [class_id], references: [class_id])
+  studentRelation   User         @relation(fields: [student_id], references: [user_id])
+  classRelation     Class        @relation(fields: [class_id], references: [class_id])
+  Attendance        Attendance[]
 }
 
 model Employee_Details {
@@ -133,6 +134,16 @@ model TimeTable {
 
   @@id([teacher_id, day, lecture])
   @@unique([class_id, day, lecture])
+}
+
+model Attendance {
+  date             DateTime
+  lecture          Int
+  student_id       Int
+  student_name     String
+  student_relation Student_Details @relation(fields: [student_id], references: [student_id])
+
+  @@id([student_id, date, lecture])
 }
 
 enum Role {

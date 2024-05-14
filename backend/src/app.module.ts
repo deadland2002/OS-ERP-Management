@@ -11,6 +11,7 @@ import { SubjectModule } from './subject/subject.module';
 import { TimetableModule } from './timetable/timetable.module';
 import { EmployeeModule } from './employee/employee.module';
 import { StudentModule } from './student/student.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { StudentModule } from './student/student.module';
     TimetableModule,
     EmployeeModule,
     StudentModule,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [
