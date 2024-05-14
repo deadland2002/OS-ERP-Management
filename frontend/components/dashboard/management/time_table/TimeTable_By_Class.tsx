@@ -117,7 +117,7 @@ const TimeTableByClass = () => {
   return (
     <div className={`flex flex-col`}>
       <div
-        className={`w-[calc(100vw-250px)] overflow-auto min-h-[calc(100vh-250px)]`}
+        className={`w-[calc(100vw-80px)] lg:w-[calc(100vw-250px)] overflow-auto min-h-[calc(100vh-250px)]`}
       >
         <div className={`min-w-[1250px]`}>
           <div className={`w-full flex flex-col gap-10 pb-5`}>

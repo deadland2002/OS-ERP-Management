@@ -196,16 +196,32 @@ export class TimetableService {
 
   async get_specific_class_only(data: ClassTimetable): Promise<BasicResponse> {
     try {
-      const subject = await this.prisma.timeTable.findMany({
+      const tableData = await this.prisma.timeTable.findMany({
         where: {
           class_id: data.class_id,
         },
       });
 
-      if (subject)
+      const class_data = await this.prisma.class.findFirst({
+        where: {
+          class_id: data.class_id,
+        },
+        select: {
+          class_id: true,
+          class_name: true,
+          start_date: true,
+          end_date: true,
+          coordinator: true,
+        },
+      });
+
+      if (tableData)
         return {
           status: HttpStatus.OK,
-          data: subject,
+          data: {
+            class_data,
+            table_data: tableData,
+          },
           error: false,
         };
       else

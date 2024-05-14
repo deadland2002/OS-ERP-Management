@@ -8,19 +8,28 @@ interface requestType{
 }
 
 interface TimeTableByClass{
-    class_id : number
-    day : "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
-    lecture : number
-    subject_id : number
-    teacher_id : number
-    teacher_name : string
-    subject_name : string
-    class_name : string
+    table_data:{
+        class_id : number
+        day : "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
+        lecture : number
+        subject_id : number
+        teacher_id : number
+        teacher_name : string
+        subject_name : string
+        class_name : string
+    }[],
+    class_data:{
+        class_id : number
+        class_name : string
+        start_date : string | null
+        end_date : string | null
+        coordinator : string | null
+    }
 }
 
 interface responseType{
     error: boolean,
-    data ?: TimeTableByClass[],
+    data ?: TimeTableByClass,
     message ?: string[],
     status_code: number
 }

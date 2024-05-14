@@ -27,11 +27,27 @@ const Page = () => {
                 <span className={`font-semibold`}>Time Table</span>
             </div>
 
-            <div className={`flex gap-4`}>
-                <span onClick={()=>{setSelectedCategory("CLASS")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm ${selectedCategory === "CLASS" ? "bg-blue-100":""}`}>Class</span>
-                <span onClick={()=>{setSelectedCategory("TEACHER")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm ${selectedCategory === "TEACHER" ? "bg-blue-100":""}`}>Teacher</span>
-                <span onClick={()=>{setSelectedCategory("NEW")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm ${selectedCategory === "NEW" ? "bg-blue-100":""}`}>New</span>
-                <span onClick={()=>{setSelectedCategory("EDIT")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm ${selectedCategory === "EDIT" ? "bg-blue-100":""}`}>Edit</span>
+            <div className={`flex gap-4`} key={selectedCategory}>
+                <span onClick={()=>{setSelectedCategory("CLASS")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm`}
+                      style={{
+                          backgroundColor: selectedCategory === "CLASS" ? "rgb(219,245,255)" : "",
+                      }}
+                >Class</span>
+                <span onClick={()=>{setSelectedCategory("TEACHER")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm`}
+                      style={{
+                          backgroundColor: selectedCategory === "TEACHER" ? "rgb(219,245,255)" : "",
+                      }}
+                >Teacher</span>
+                <span onClick={()=>{setSelectedCategory("NEW")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm `}
+                      style={{
+                          backgroundColor: selectedCategory === "NEW" ? "rgb(219,245,255)" : "",
+                      }}
+                >New</span>
+                <span onClick={()=>{setSelectedCategory("EDIT")}} className={`cursor-pointer bg-gray-100 rounded-md px-2 py-1 text-sm`}
+                      style={{
+                          backgroundColor: selectedCategory === "EDIT" ? "rgb(219,245,255)" : "",
+                      }}
+                >Edit</span>
             </div>
 
             {optionalMounted}
