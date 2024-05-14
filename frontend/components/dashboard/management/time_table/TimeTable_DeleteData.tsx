@@ -1,11 +1,6 @@
 import React, { FormEvent, useEffect } from "react";
 import { Button, Select, SelectItem, Spinner } from "@nextui-org/react";
-import {
-  API_TimeTable_Get_FreeTeachers,
-  TimeTable_Get_FreeTeachers_Type,
-} from "../../../../helper/API/employee/get_free_employee_for_timetable";
 import { All_Subjects_Type } from "../../../../helper/API/subject/subject_get_all";
-import { API_TimeTable_Add_New } from "../../../../helper/API/time_table/add_new";
 import { TimeTablecellTypes } from "./TimeTable_Edit";
 import { API_TimeTable_Delete } from "../../../../helper/API/time_table/delete";
 

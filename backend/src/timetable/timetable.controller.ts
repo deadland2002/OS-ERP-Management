@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Request } from '@nestjs/common';
 import { BasicResponse } from '../../interface/response/basic';
 import { TimetableService } from './timetable.service';
 import {
@@ -70,5 +70,15 @@ export class TimetableController {
   @Get('timetable/get_initialised_class')
   async get_initialised_class(): Promise<BasicResponse> {
     return this.timetableService.get_initialised_class();
+  }
+
+  @Roles(Role.Student)
+  @Get('timetable/get_student_personal_timetable')
+  async get_student_personal_timetable(
+    @Request() req: Request,
+  ): Promise<BasicResponse> {
+    return this.timetableService.get_student_personal_timetable(
+      req.headers['authorization'],
+    );
   }
 }

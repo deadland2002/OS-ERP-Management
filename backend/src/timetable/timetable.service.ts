@@ -220,6 +220,43 @@ export class TimetableService {
     }
   }
 
+  async get_student_personal_timetable(token: string): Promise<BasicResponse> {
+    try {
+      const userObj = await this.prisma.token.findFirst({
+        where: {
+          token,
+        },
+        select: {
+          user: {
+            select: {
+              student_Details: {
+                select: {
+                  class_id: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!userObj)
+        return {
+          status: HttpStatus.NOT_FOUND,
+          data: '',
+          message: ['Class not found'],
+          error: false,
+        };
+
+      console.log(userObj);
+
+      return this.get_specific_class_only({
+        class_id: userObj.user.student_Details.class_id,
+      });
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
   async get_empty_class(): Promise<BasicResponse> {
     try {
       const classes = await this.prisma.class.findMany({
