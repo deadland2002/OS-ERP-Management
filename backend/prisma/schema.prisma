@@ -63,7 +63,7 @@ model Student_Details {
 }
 
 model Employee_Details {
-  employee_id         Int         @unique
+  employee_id         Int          @unique
   first_name          String
   middle_name         String
   last_name           String
@@ -78,13 +78,14 @@ model Employee_Details {
   country_code        Int
   guardian_name       String
   guardian_relation   String
-  uid                 String      @unique
+  uid                 String       @unique
   uid_type            String
-  salary              Int         @default(0)
-  employeeRelation    User        @relation(fields: [employee_id], references: [user_id])
+  salary              Int          @default(0)
+  employeeRelation    User         @relation(fields: [employee_id], references: [user_id])
   coordinatorRelation Class[]
   Teaches             Teaches[]
   TimeTable           TimeTable[]
+  Attendance          Attendance[]
 }
 
 model Class {
@@ -137,11 +138,16 @@ model TimeTable {
 }
 
 model Attendance {
-  date             DateTime
-  lecture          Int
-  student_id       Int
-  student_name     String
-  student_relation Student_Details @relation(fields: [student_id], references: [student_id])
+  date         DateTime
+  lecture      Int
+  student_id   Int
+  student_name String
+  is_blocked   Boolean  @default(false)
+  block_reason String   @default("NA")
+  teacher_id   Int
+
+  student_relation Student_Details  @relation(fields: [student_id], references: [student_id])
+  teacher_relation Employee_Details @relation(fields: [teacher_id], references: [employee_id])
 
   @@id([student_id, date, lecture])
 }

@@ -12,11 +12,18 @@ import errorHandler from '../../helper/errorHandler';
 export class AttendanceService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: AddAttendance): Promise<BasicResponse> {
+  async create(data: AddAttendance, token: string): Promise<BasicResponse> {
     try {
+      const teacher = await this.prisma.token.findFirst({
+        where: {
+          token: token,
+        },
+      });
+
       await this.prisma.attendance.create({
         data: {
           ...data,
+          teacher_id: teacher.user_id,
         },
       });
 

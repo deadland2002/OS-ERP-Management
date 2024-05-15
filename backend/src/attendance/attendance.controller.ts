@@ -15,8 +15,11 @@ export class AttendanceController {
 
   @Roles(Role.Admin, Role.Management)
   @Post('attendance/create')
-  async signUpUser(@Body() data: AddAttendance): Promise<BasicResponse> {
-    return this.classService.create(data);
+  async signUpUser(
+    @Body() data: AddAttendance,
+    @Request() req: Request,
+  ): Promise<BasicResponse> {
+    return this.classService.create(data, req.headers['authorization']);
   }
 
   @Roles(Role.Admin, Role.Management)
