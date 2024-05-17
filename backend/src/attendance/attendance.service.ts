@@ -53,6 +53,8 @@ export class AttendanceService {
       });
 
       const all_arr = [];
+      const deleteOperations = [];
+
       for (const lecture of data.lectures) {
         for (const id of data.student_id) {
           all_arr.push({
@@ -61,10 +63,28 @@ export class AttendanceService {
             date: data.date.split('T')[0],
             lecture: lecture,
           });
+
+          deleteOperations.push(
+            this.prisma.attendance
+              .delete({
+                where: {
+                  student_id_date_lecture: {
+                    date: data.date.split('T')[0],
+                    lecture: lecture,
+                    student_id: id,
+                  },
+                },
+              })
+              .catch((error) => {
+                if (error.code !== 'P2025') {
+                  throw error; // Only ignore the specific 'record not found' error
+                }
+              }),
+          );
         }
       }
 
-      console.log(all_arr);
+      await Promise.all(deleteOperations);
 
       await this.prisma.attendance.createMany({
         data: all_arr,
@@ -160,19 +180,27 @@ export class AttendanceService {
           },
         });
       } else {
-        result = await this.prisma.student_Details.findMany({
-          where: {
-            Attendance: {
-              none: {
-                lecture: {
-                  in: data.lecture,
-                },
-                date: data.date,
-              },
+        if (data.lecture.length === 8) {
+          result = await this.prisma.student_Details.findMany({
+            where: {
+              class_id: data.class_id,
             },
-            class_id: data.class_id,
-          },
-        });
+          });
+        } else {
+          result = await this.prisma.student_Details.findMany({
+            where: {
+              Attendance: {
+                none: {
+                  lecture: {
+                    in: data.lecture,
+                  },
+                  date: data.date,
+                },
+              },
+              class_id: data.class_id,
+            },
+          });
+        }
       }
 
       return {
