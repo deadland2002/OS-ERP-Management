@@ -1,4 +1,10 @@
-import { IsArray, IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+} from 'class-validator';
 
 export class AddAttendance {
   @IsNotEmpty()
@@ -46,4 +52,27 @@ export class GetByClassAttendance {
   @IsNotEmpty()
   @IsNumber()
   class_id: number;
+}
+
+enum attendanceType {
+  ABSENT = 'ABSENT',
+  PRESENT = 'PRESENT',
+}
+
+export class GetByFilteredAttendance {
+  @IsNotEmpty()
+  @IsNumber()
+  class_id: number;
+
+  @IsNotEmpty()
+  @IsArray()
+  lecture: number[];
+
+  @IsNotEmpty()
+  @IsEnum(attendanceType)
+  type: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  date: string;
 }

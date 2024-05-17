@@ -1,215 +1,248 @@
-"use client"
+"use client";
 
-import React, {useEffect, useState} from 'react';
-import {TimeTable_Class_UnInitialised} from "../../../../../helper/API/time_table/get_uninitialised_class";
-import {toast} from "react-toastify";
-import {toastCompactTheme} from "../../../../../Default/toast";
-import {Button, Select, SelectItem} from "@nextui-org/react";
-import {API_Class_Get_List, Class_Get_List_Type} from "../../../../../helper/API/class/get_class_list";
-import {API_Class_Get_Student, StudentClassList} from "../../../../../helper/API/class/get_student_by_class";
-import {API_Auth_Sign_Out} from "../../../../../helper/API/auth/sign_out";
-import {API_Attendance_Add_New, API_Attendance_Add_New_Bulk} from "../../../../../helper/API/attendance/add_new";
+import React, { FormEvent, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { toastCompactTheme } from "../../../../../Default/toast";
+import {Button, DateInput, DatePicker, Select, SelectItem} from "@nextui-org/react";
+import {
+  API_Class_Get_List,
+  Class_Get_List_Type,
+} from "../../../../../helper/API/class/get_class_list";
+import {
+  API_Class_Get_Student,
+  StudentClassList,
+} from "../../../../../helper/API/class/get_student_by_class";
+import {API_Attendance_Get_Filtered, AttendanceList} from "../../../../../helper/API/attendance/get_filtered";
+import PresentAttendanceList from "../../../../../components/dashboard/attendance/PresentAttendanceList";
+import AbsentAttendanceList from "../../../../../components/dashboard/attendance/AbsentAttendanceList";
+import {API_Attendance_Add_New_Bulk} from "../../../../../helper/API/attendance/add_new_bulk";
 
 const Page = () => {
-    const [classArr, setClassArr] = useState<Class_Get_List_Type[]>([]);
-    const [selectedClass, setSelectedClass] =
-        useState<Class_Get_List_Type | null>(null);
-    const [studentData,setStudentData] = useState<StudentClassList[]>([])
+  const [classArr, setClassArr] = useState<Class_Get_List_Type[]>([]);
+  const [selectedClass, setSelectedClass] =
+    useState<Class_Get_List_Type | null>(null);
+  const [studentData, setStudentData] = useState<StudentClassList[] | AttendanceList[]>([]);
+  const [lectureArr,setLectureArr] = useState<string[]>([]);
+  const [attendanceType,setAttendanceType] = useState<"ABSENT"|"PRESENT">("ABSENT");
+  const [absentMarkPayload , setAbsentMarkPayload] = useState<{
+    class_id:number,
+    lecture: number[],
+    date: string
+  }|null>(null)
 
-    const getClasses = async () => {
-        const promise = new Promise(async (resolve, rej) => {
-            const response = await API_Class_Get_List();
-            if (response.message || !response.data) return rej(response.message);
-            setClassArr(response.data);
-            resolve(response);
-        });
-        await toast
-            .promise(
-                promise,
-                {
-                    pending: "Fetching classes ...",
-                    success: "Classes fetched",
-                },
-                toastCompactTheme,
-            )
-            .catch((reason) => {
-                for (const msg of reason) toast.error(msg, toastCompactTheme);
-            });
-    };
+  const getClasses = async () => {
+    const promise = new Promise(async (resolve, rej) => {
+      const response = await API_Class_Get_List();
+      if (response.message || !response.data) return rej(response.message);
+      setClassArr(response.data);
+      resolve(response);
+    });
+    await toast
+      .promise(
+        promise,
+        {
+          pending: "Fetching classes ...",
+          success: "Classes fetched",
+        },
+        toastCompactTheme,
+      )
+      .catch((reason) => {
+        for (const msg of reason) toast.error(msg, toastCompactTheme);
+      });
+  };
 
-    useEffect(() => {
-        const time = setTimeout(getClasses, 500);
-        return () => clearTimeout(time);
-    }, []);
+  useEffect(() => {
+    const time = setTimeout(getClasses, 500);
+    return () => clearTimeout(time);
+  }, []);
 
+  const HandleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const fetchData = (class_id: number) => {
-        const promise = new Promise(async (resolve, reject) => {
-            const response = await API_Class_Get_Student({class_id});
-            if(response.message || !response.data) return reject(response.message);
-            setStudentData(response.data);
-            resolve(1);
-        });
-        toast
-            .promise(
-                promise,
-                {
-                    pending: "Fetching students...",
-                    success: "Students fetched",
-                },
-                toastCompactTheme,
-            )
-            .catch((reason) => {
-                for (const msg of reason) toast.error(msg, toastCompactTheme);
-            });
-    };
+    const form = e.target as HTMLFormElement;
+    const data = new FormData(form);
+    const class_data = JSON.parse(data.get("class")?.toString() ?? "");
+    const lecture_data = Array.from(lectureArr);
+    const type_data = data.get("type");
+    const date_data = data.get("date");
+    const class_id = class_data.class_id;
 
-    useEffect(() => {
-        if (selectedClass && selectedClass.class_id)
-            fetchData(Number(selectedClass.class_id));
-    }, [selectedClass]);
+    let date_today = new Date(`${date_data}`).toISOString().split("T")[0];
+    let lecture_arr: number[] = [];
 
-
-    const HandleSubmit = () =>{
-        const elements_students : NodeListOf<HTMLInputElement> = document.querySelectorAll(".checkboxBtn")
-        const elements_lectures : NodeListOf<HTMLInputElement> = document.querySelectorAll(".lectureChkBox")
-        const filtered_students : number[] = [];
-        let filtered_lectures : number[] = [];
-        let date_today = (new Date()).toISOString();
-
-        for(const element of elements_students){
-            if(element.checked){
-                const value = Number(element.getAttribute("data-id"));
-                filtered_students.push(value);
-            }
-        }
-
-        for(const element of elements_lectures){
-            if(element.checked){
-                const value = element.getAttribute("data-id");
-                if(value && value==="ALL"){
-                    filtered_lectures = [1,2,3,4,5,6,7,8]
-                    break;
-                }
-                filtered_lectures.push(Number(value));
-            }
-        }
-
-        const promise = new Promise(async (resolve, reject) => {
-            const response = await API_Attendance_Add_New_Bulk({
-                student_id:filtered_students,
-                date:date_today,
-                lectures:filtered_lectures,
-            });
-
-            if(response.error)
-                reject(response.message);
-            else
-                resolve(1);
-        });
-
-        toast
-            .promise(
-                promise,
-                {
-                    pending: "Saving ...",
-                    success: "Saved",
-                },
-                toastCompactTheme,
-            )
-            .catch((reason: string[]) => {
-                for (let msg of reason) toast.error(msg, toastCompactTheme);
-            });
-
+    for(const lecture of lecture_data){
+      if(lecture === "ALL"){
+        lecture_arr = [1,2,3,4,5,6,7,8];
+        break;
+      }else{
+        lecture_arr.push(Number(lecture))
+      }
     }
 
+    console.log(lecture_arr);
+    console.log(type_data);
+    console.log(class_id);
 
-    return (
-        <div className={`flex w-full pl-4 flex-col gap-6`}>
-            <div className={`text-2xl pt-4 flex justify-between`}>
-                <span className={`font-semibold`}>Attendance</span>
-            </div>
+    const promise = new Promise(async (resolve, reject) => {
+      const response = await API_Attendance_Get_Filtered({
+        class_id: class_id,
+        date: date_today,
+        lecture: lecture_arr,
+        type: type_data as "ABSENT" | "PRESENT",
+      });
 
-            <div className={`flex flex-col`}>
-                <div className={`justify-start`}>
-                    <Select
-                        size={"sm"}
-                        label={"Class"}
-                        labelPlacement={"outside"}
-                        placeholder={"Select"}
-                        onSelectionChange={(value: any) => {
-                            setSelectedClass(JSON.parse(value.currentKey));
-                        }}
-                    >
-                        {classArr.map((item) => (
-                            <SelectItem key={JSON.stringify(item)}>
-                                {item.class_name}
-                            </SelectItem>
-                        ))}
-                    </Select>
-                </div>
-            </div>
+      if (response.error) return reject(response.message);
+      else if (response.data){
+        console.log("data",response.data)
+        setStudentData(response.data)
+        setAttendanceType(type_data as "ABSENT" | "PRESENT")
+        setAbsentMarkPayload({
+          class_id: class_id,
+          date: date_today,
+          lecture: lecture_arr,
+        })
+      }
 
+      resolve(1);
+    });
+
+    toast
+      .promise(
+        promise,
+        {
+          pending: "Saving ...",
+          success: "Saved",
+        },
+        toastCompactTheme,
+      )
+      .catch((reason: string[]) => {
+        for (let msg of reason) toast.error(msg, toastCompactTheme);
+      });
+  };
+
+  const HandleMarkAbsent = async (dataSet : Set<string>) =>{
+      const arr  = Array.from(dataSet);
+      const arr_ids = arr.map((single)=>{
+        return Number(JSON.parse(single).student_id)
+      })
+      if(!absentMarkPayload)
+        return toast.error("Absent payload missing", toastCompactTheme);
+
+    const promise = new Promise(async (resolve, reject) => {
+      const response = await API_Attendance_Add_New_Bulk({
+        student_id: arr_ids,
+        date: absentMarkPayload.date,
+        lectures: absentMarkPayload.lecture,
+      });
+
+      if (response.error) return reject(response.message);
+      else if (response.data)
+        return resolve(1);
+    });
+
+    toast
+        .promise(
+            promise,
             {
-                studentData.length >= 1 && (
-                    <div className={`flex w-full justify-center flex-col items-center`}>
+              pending: "Saving ...",
+              success: "Saved",
+            },
+            toastCompactTheme,
+        )
+        .catch((reason: string[]) => {
+          for (let msg of reason) toast.error(msg, toastCompactTheme);
+        });
+  }
 
-                        <div className={`py-2 flex flex-col gap-2 w-full max-w-[600px]`}>
-                            <div className={`text-2xl font-semibold`}>
-                                <span>Lectures</span>
-                            </div>
-                            <div className={`flex w-full justify-between`}>
-                                {
-                                    Array.from({length: 8}).map((_, index) => (
-                                        <div className={`flex gap-1`} key={`lecture_select_${index}`}>
-                                            <input type={'checkbox'}  className={`lectureChkBox`} data-id={index+1}/>
-                                            <span>{index + 1}</span>
-                                        </div>
-                                    ))
-                                }
+  return (
+    <div className={`flex w-full pl-4 flex-col gap-6`}>
+      <div className={`text-2xl pt-4 flex justify-between`}>
+        <span className={`font-semibold`}>Attendance</span>
+      </div>
 
-                                <div className={`flex gap-1`}>
-                                    <input type={'checkbox'} className={`lectureChkBox`} data-id={"ALL"}/>
-                                    <span>All</span>
-                                </div>
-                            </div>
-                        </div>
+      <form
+        className={`flex flex-col gap-2 justify-center items-center`}
+        onSubmit={HandleSubmit}
+      >
+        <div className={`flex gap-2 w-full max-w-[800px] flex-wrap`}>
+          <Select
+            className={`min-w-[250px] flex-1`}
+            size={"sm"}
+            label={"Class"}
+            labelPlacement={"outside"}
+            placeholder={"Select"}
+            name={"class"}
+            isRequired
+          >
+            {classArr.map((item) => (
+              <SelectItem key={JSON.stringify(item)}>
+                {item.class_name}
+              </SelectItem>
+            ))}
+          </Select>
 
-                        <div className={`flex flex-col w-fit min-w-[600px] gap-2 pb-10`}>
-                            <div className={`flex justify-between bg-gray-100 rounded-md px-2 py-1 font-semibold`}>
-                                <span className={`min-w-[50px]`}>ID</span>
-                                <span className={`min-w-[100px]`}>Roll Number</span>
-                                <span className={`w-[50px]`}>Image</span>
-                                <span className={`min-w-[100px]`}>First Name</span>
-                                <span className={`min-w-[100px]`}>Last Name</span>
-                                <span className={`min-w-[50px]`}>Status</span>
-                            </div>
+          <Select
+            className={`min-w-[250px] flex-1`}
+            size={"sm"}
+            label={"Lecture"}
+            labelPlacement={"outside"}
+            placeholder={"Select"}
+            name={"lecture"}
+            selectionMode={'multiple'}
+            onSelectionChange={setLectureArr as any}
+            isRequired
+          >
+            {["1", "2", "3", "4", "5", "6", "7", "8", "9", "ALL"].map(
+              (item, index) => (
+                <SelectItem key={item} textValue={item}>
+                  {item}
+                </SelectItem>
+              ),
+            )}
+          </Select>
 
-                            {
-                                studentData.map((item, index) => (
-                                    <div key={`student-${index}`}
-                                         className={`flex justify-between bg-gray-100 rounded-md px-2 py-1`}>
-                                        <span className={`min-w-[50px]`}>{item.student_id}</span>
-                                        <span className={`min-w-[100px]`}>{item.rollnumber}</span>
-                                        <span className={`w-[50px]`}><a
-                                            href={`http://localhost:3002${item.studentRelation.image_url}`}
-                                            className={`text-blue-500`} target={'_blank'}>View</a></span>
-                                        <span className={`min-w-[100px]`}>{item.first_name}</span>
-                                        <span className={`min-w-[100px]`}>{item.last_name}</span>
-                                        <span className={`min-w-[50px]`}>
-                                    <input data-id={item.student_id} type={'checkbox'} className={`checkboxBtn`}/>
-                                </span>
-                                    </div>
-                                ))
-                            }
-                        </div>
+          <Select
+            className={`min-w-[250px] flex-1`}
+            size={"sm"}
+            label={"Type"}
+            labelPlacement={"outside"}
+            placeholder={"Select"}
+            name={"type"}
+            isRequired
+          >
+            <SelectItem key={"ABSENT"} textValue={"ABSENT"}>
+              ABSENT
+            </SelectItem>
+            <SelectItem key={"PRESENT"} textValue={"PRESENT"}>
+              PRESENT
+            </SelectItem>
+          </Select>
 
-                        <Button className={``} size={'sm'} color={'primary'} onClick={HandleSubmit}>Submit</Button>
-                    </div>
-                )
-            }
+          <DatePicker name={'date'} size={'sm'} />
         </div>
-    );
+
+        <div>
+          <Button
+            type={"submit"}
+            size={"sm"}
+            variant={"solid"}
+            color={"primary"}
+          >
+            Fetch
+          </Button>
+        </div>
+      </form>
+
+      {
+        studentData.length > 0 ?
+              attendanceType === "ABSENT" ?
+                <AbsentAttendanceList data={studentData as AttendanceList[]}/>
+              :
+                <PresentAttendanceList handleMarkAbsent={HandleMarkAbsent} data={studentData as StudentClassList[]} />
+            : "no data"
+      }
+    </div>
+  );
 };
 
 export default Page;
