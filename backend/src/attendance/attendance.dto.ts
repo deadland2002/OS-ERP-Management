@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class AddAttendance {
   @IsNotEmpty()
@@ -12,10 +12,20 @@ export class AddAttendance {
   @IsNotEmpty()
   @IsNumber()
   lecture: number;
+}
+
+export class AddBulkAttendance {
+  @IsNotEmpty()
+  @IsArray()
+  student_id: number[];
 
   @IsNotEmpty()
-  @IsString()
-  student_name: string;
+  @IsDateString()
+  date: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  lectures: number[];
 }
 
 export class DeleteAttendance {

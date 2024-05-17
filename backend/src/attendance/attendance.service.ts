@@ -2,6 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import {
   AddAttendance,
+  AddBulkAttendance,
   DeleteAttendance,
   GetByClassAttendance,
 } from './attendance.dto';
@@ -22,9 +23,50 @@ export class AttendanceService {
 
       await this.prisma.attendance.create({
         data: {
-          ...data,
+          student_id: data.student_id,
           teacher_id: teacher.user_id,
+          date: data.date,
+          lecture: data.lecture,
         },
+      });
+
+      return {
+        status: HttpStatus.CREATED,
+        data: 'Attendance created successfully',
+        error: false,
+      };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async createBulk(
+    data: AddBulkAttendance,
+    token: string,
+  ): Promise<BasicResponse> {
+    try {
+      const teacher = await this.prisma.token.findFirst({
+        where: {
+          token: token,
+        },
+      });
+
+      const all_arr = [];
+      for (const lecture of data.lectures) {
+        for (const id of data.student_id) {
+          all_arr.push({
+            student_id: id,
+            teacher_id: teacher.user_id,
+            date: data.date.split('T')[0],
+            lecture: lecture,
+          });
+        }
+      }
+
+      console.log(all_arr);
+
+      await this.prisma.attendance.createMany({
+        data: all_arr,
       });
 
       return {

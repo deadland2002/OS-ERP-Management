@@ -138,12 +138,11 @@ model TimeTable {
 }
 
 model Attendance {
-  date         DateTime
+  date         String
   lecture      Int
   student_id   Int
-  student_name String
-  is_blocked   Boolean  @default(false)
-  block_reason String   @default("NA")
+  is_blocked   Boolean @default(false)
+  block_reason String  @default("NA")
   teacher_id   Int
 
   student_relation Student_Details  @relation(fields: [student_id], references: [student_id])

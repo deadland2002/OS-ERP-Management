@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma.service';
 import {
   CreateClass,
   DeleteClass,
+  SingleClass,
   TransferClass,
   UpdateClassDetails,
 } from './class.dto';
@@ -110,6 +111,43 @@ export class ClassService {
           error: false,
         };
       else
+        return {
+          status: HttpStatus.NOT_FOUND,
+          data: '',
+          message: ['Classes not found'],
+          error: false,
+        };
+    } catch (err) {
+      return errorHandler(err);
+    }
+  }
+
+  async get_student_by_class(data: SingleClass): Promise<BasicResponse> {
+    try {
+      const classes = await this.prisma.student_Details.findMany({
+        where: {
+          class_id: data.class_id,
+        },
+        select: {
+          first_name: true,
+          last_name: true,
+          student_id: true,
+          rollnumber: true,
+          studentRelation: {
+            select: {
+              image_url: true,
+            },
+          },
+        },
+      });
+
+      if (classes) {
+        return {
+          status: HttpStatus.OK,
+          data: classes,
+          error: false,
+        };
+      } else
         return {
           status: HttpStatus.NOT_FOUND,
           data: '',

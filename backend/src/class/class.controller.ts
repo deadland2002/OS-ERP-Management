@@ -1,15 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { BasicResponse } from '../../interface/response/basic';
-import { ClassService } from './class.service';
-import {
-  CreateClass,
-  DeleteClass,
-  TransferClass,
-  UpdateClassDetails,
-  UpdateClassLectures,
-} from './class.dto';
-import { Roles } from '../Role/role.decorator';
-import { Role } from '../Role/role.enum';
+import {Body, Controller, Get, Post} from '@nestjs/common';
+import {BasicResponse} from '../../interface/response/basic';
+import {ClassService} from './class.service';
+import {CreateClass, DeleteClass, SingleClass, TransferClass, UpdateClassDetails,} from './class.dto';
+import {Roles} from '../Role/role.decorator';
+import {Role} from '../Role/role.enum';
 
 @Controller()
 export class ClassController {
@@ -21,7 +15,7 @@ export class ClassController {
     return this.classService.create(data);
   }
 
-  @Roles(Role.Admin, Role.Admission, Role.Management)
+  @Roles(Role.Admin, Role.Admission, Role.Management , Role.Teacher)
   @Get('class/get_all')
   async get_all(): Promise<BasicResponse> {
     return this.classService.get_all();
@@ -45,5 +39,13 @@ export class ClassController {
   @Post('class/transfer')
   async transfer_all(@Body() data: TransferClass): Promise<BasicResponse> {
     return this.classService.transfer_class(data);
+  }
+
+  @Roles(Role.Admin, Role.Management , Role.Teacher)
+  @Get('class/get_student_by_class')
+  async get_student_by_class(
+    @Body() data: SingleClass,
+  ): Promise<BasicResponse> {
+    return this.classService.get_student_by_class(data);
   }
 }

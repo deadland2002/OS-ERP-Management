@@ -99,3 +99,9 @@ export class TransferClass {
   @IsNumber()
   new_class_id: number;
 }
+
+export class SingleClass {
+  @IsNotEmpty()
+  @IsNumber()
+  class_id: number;
+}

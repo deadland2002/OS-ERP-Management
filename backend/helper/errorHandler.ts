@@ -3,6 +3,8 @@ import { HttpStatus } from '@nestjs/common';
 
 function handleError(err: Error) {
   if (err instanceof PrismaClientKnownRequestError) {
+    console.log(err);
+
     if (err.code === 'P2002') {
       const arrOfTarget = err.meta.target as string[];
       const result: string[] = [];
@@ -38,7 +40,6 @@ function handleError(err: Error) {
     };
   }
 
-  console.log(err);
   return {
     status: HttpStatus.BAD_REQUEST,
     data: {},
