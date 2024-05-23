@@ -20,3 +20,12 @@ body{
 i{
     @apply p-0 m-0 flex justify-center items-center;
 }
+
+.noscroll{
+    scrollbar-width: none;
+}
+
+.minimalScroll{
+    scrollbar-width: thin;
+    scrollbar-color: #dadada transparent;
+}

@@ -7,8 +7,8 @@ interface Props{
 
 const AbsentAttendanceList = (prop:Props) => {
     return (
-        <div className={`w-full flex justify-center pb-10`}>
-            <div className={`w-full flex max-w-[1000px] flex-col gap-2`}>
+        <div className={`w-full justify-center overflow-x-auto max-w-[calc(100vw-80px)] lg:max-w-[calc(100vw-250px)] minimalScroll`}>
+            <div className={`flex min-w-[1000px] flex-col gap-2`}>
                 <div className={`flex w-full flex-wrap bg-gray-100 rounded-md px-2 py-1 justify-between font-semibold`}>
                     <span className={`min-w-[100px]`}>ID</span>
                     <span className={`min-w-[100px]`}>DATE</span>

@@ -155,7 +155,7 @@ const Page = () => {
   }
 
   return (
-    <div className={`flex w-full pl-4 flex-col gap-6`}>
+    <div className={`flex w-full px-2 flex-col gap-6 h-fit`}>
       <div className={`text-2xl pt-4 flex justify-between`}>
         <span className={`font-semibold`}>Attendance</span>
       </div>
